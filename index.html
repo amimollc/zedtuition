@@ -4,484 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Zed Tuition | Home - Smart Learning for Zambia</title>
-  <!-- Font Awesome 6 (free icons) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #0a0c12;
-      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
-      color: #edeef5;
-      overflow-x: hidden;
-    }
-
-    /* purple-black gradient theme */
-    :root {
-      --primary: #7c5cff;
-      --primary-dark: #5a3fcc;
-      --primary-glow: #9b7cff;
-      --dark-bg: #07090f;
-      --card-bg: #12141e;
-      --border-subtle: #252a3a;
-      --text-muted: #a7b0ca;
-    }
-
-    /* ===== SIDEBAR (HAMBURGER MENU) ===== */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 300px;
-      height: 100%;
-      background: rgba(8, 10, 18, 0.98);
-      backdrop-filter: blur(16px);
-      border-right: 1px solid var(--border-subtle);
-      z-index: 1000;
-      transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      box-shadow: 4px 0 25px rgba(0, 0, 0, 0.6);
-    }
-
-    .sidebar.open {
-      left: 0;
-    }
-
-    .sidebar .logo-side {
-      font-size: 1.7rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ffffff, var(--primary));
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      border-bottom: 1px solid #2d3246;
-      padding-bottom: 1rem;
-    }
-
-    .sidebar nav {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-
-    .sidebar nav a {
-      color: #e0e4f0;
-      text-decoration: none;
-      font-weight: 500;
-      padding: 0.5rem 0;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.1rem;
-    }
-
-    .sidebar nav a i {
-      width: 28px;
-      font-size: 1.2rem;
-    }
-
-    .sidebar nav a:hover {
-      color: var(--primary);
-      transform: translateX(6px);
-    }
-
-    .sidebar .close-sidebar {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      text-align: right;
-      margin-bottom: 10px;
-    }
-
-    .overlay-blur {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(3px);
-      z-index: 999;
-      display: none;
-    }
-
-    .overlay-blur.active {
-      display: block;
-    }
-
-    /* main container */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 1.5rem 2rem;
-    }
-
-    /* header with hamburger */
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-      gap: 1rem;
-    }
-
-    .hamburger {
-      background: #1e2130;
-      border: none;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      width: 48px;
-      height: 48px;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.2s;
-    }
-
-    .hamburger:hover {
-      background: var(--primary);
-      box-shadow: 0 0 12px rgba(124, 92, 255, 0.5);
-    }
-
-    .logo-area h1 {
-      font-size: 2rem;
-      background: linear-gradient(135deg, #ffffff, var(--primary));
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    /* HERO SECTION - welcoming */
-    .hero-welcome {
-      background: radial-gradient(circle at 20% 30%, rgba(124, 92, 255, 0.2), transparent 70%);
-      border-radius: 2rem;
-      padding: 2.5rem 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid rgba(124, 92, 255, 0.3);
-      text-align: center;
-    }
-
-    .hero-welcome h2 {
-      font-size: 2.4rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .hero-welcome p {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      max-width: 750px;
-      margin: 0 auto 1rem;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      gap: 1.5rem;
-      background: rgba(20, 22, 36, 0.7);
-      backdrop-filter: blur(8px);
-      padding: 0.6rem 1.8rem;
-      border-radius: 60px;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .hero-badge i {
-      color: var(--primary);
-      margin-right: 6px;
-    }
-
-    /* info sections grid */
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-      margin: 2rem 0;
-    }
-
-    .info-card {
-      background: var(--card-bg);
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      border: 1px solid var(--border-subtle);
-      transition: 0.25s;
-    }
-
-    .info-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-5px);
-    }
-
-    .info-card i {
-      font-size: 2.2rem;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-
-    .info-card h3 {
-      font-size: 1.4rem;
-      margin-bottom: 0.7rem;
-    }
-
-    .info-card p {
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .tools-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
-
-    .tools-list span {
-      background: #1f2233;
-      padding: 5px 12px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-    }
-
-    /* search section – enhanced */
-    .search-section {
-      background: var(--card-bg);
-      border-radius: 2rem;
-      padding: 1.8rem;
-      border: 1px solid var(--border-subtle);
-      margin: 2rem 0 1rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .search-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .search-box {
-      flex: 3;
-      display: flex;
-      background: #1a1d2b;
-      border-radius: 60px;
-      padding: 0.3rem 0.3rem 0.3rem 1.2rem;
-      align-items: center;
-      border: 1px solid #2d3246;
-      transition: all 0.2s;
-    }
-
-    .search-box:focus-within {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.4);
-    }
-
-    .search-box input {
-      background: transparent;
-      border: none;
-      padding: 12px 8px;
-      width: 100%;
-      color: white;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    .search-box button {
-      background: var(--primary);
-      border: none;
-      padding: 8px 24px;
-      border-radius: 50px;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .search-box button:hover {
-      background: var(--primary-dark);
-      transform: scale(0.97);
-    }
-
-    .filter-group {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .filter-group select, .filter-group button {
-      background: #1a1d2b;
-      border: 1px solid #2d3246;
-      padding: 8px 16px;
-      border-radius: 40px;
-      color: white;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    .result-stats {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* resource grid */
-    .resource-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .resource-card {
-      background: var(--card-bg);
-      border-radius: 1.2rem;
-      border: 1px solid #202433;
-      overflow: hidden;
-      transition: all 0.25s ease;
-      cursor: pointer;
-    }
-
-    .resource-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--primary);
-      box-shadow: 0 18px 30px -12px rgba(124, 92, 255, 0.4);
-    }
-
-    .thumbnail-area {
-      background: #0b0d14;
-      height: 160px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .thumbnail-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .badge-type {
-      position: absolute;
-      top: 10px;
-      left: 12px;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    .badge-doc { background: #1f3b4c; color: #7cd4ff; }
-    .badge-video { background: #3c2b4a; color: #d9b4ff; }
-    .badge-external { background: #4a3b2c; color: #ffd966; }
-
-    .card-content {
-      padding: 1rem;
-    }
-
-    .card-content h4 {
-      font-size: 0.95rem;
-      margin-bottom: 6px;
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #949bbf;
-    }
-
-    .level-tag {
-      background: #252a3a;
-      padding: 2px 8px;
-      border-radius: 20px;
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 3rem;
-      grid-column: 1 / -1;
-      color: var(--text-muted);
-    }
-
-    .quick-links {
-      margin: 3rem 0 1rem;
-      text-align: center;
-    }
-
-    .quick-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      justify-content: center;
-      margin-top: 1rem;
-    }
-
-    .quick-card {
-      background: linear-gradient(145deg, #12141e, #0b0d14);
-      border-radius: 1.5rem;
-      padding: 1rem 1.5rem;
-      min-width: 160px;
-      text-align: center;
-      border: 1px solid #282e42;
-      text-decoration: none;
-      color: white;
-      transition: 0.2s;
-    }
-
-    .quick-card i {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-      display: block;
-      color: var(--primary);
-    }
-
-    .quick-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-3px);
-    }
-
-    footer {
-      margin-top: 3rem;
-      text-align: center;
-      padding: 1.5rem;
-      border-top: 1px solid #202433;
-      color: #6f7893;
-    }
-
-    @media (max-width: 700px) {
-      .container { padding: 1rem; }
-      .search-wrapper { flex-direction: column; }
-      .hero-welcome h2 { font-size: 1.6rem; }
-    }
-  </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.png">
 </head>
 <body>
 <div class="overlay-blur" id="overlayBlur"></div>
 
-<!-- Sidebar hamburger menu -->
+<!-- Sidebar Menu with direct page links -->
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" id="closeSidebarBtn">✕</button>
   <div class="logo-side"><i class="fas fa-graduation-cap"></i> Zed Tuition</div>
   <nav>
-    <a href="index.html"><i class="fas fa-home"></i> Home</a>
-    <a href="grade10-12.html"><i class="fas fa-book-open"></i> Grade 10-12</a>
+    <a href="primary.html"><i class="fas fa-child"></i> Primary 5-7</a>
     <a href="form1-2.html"><i class="fas fa-book"></i> Form 1-2</a>
-    <a href="primary.html"><i class="fas fa-chalkboard-user"></i> Primary 5-7</a>
-    <a href="#resources"><i class="fas fa-search"></i> Search Resources</a>
+    <a href="grade10-12.html"><i class="fas fa-book-open"></i> Grade 10-12</a>
+    <a href="#" id="backToTopLink"><i class="fas fa-home"></i> Back to top</a>
   </nav>
-  <div style="margin-top: auto; font-size:0.8rem;"><i class="fas fa-map-marker-alt"></i> 🇿🇲 For Zambian students</div>
+  <div style="margin-top: auto; font-size:0.8rem;"><i class="fas fa-map-marker-alt"></i> ECZ Curriculum | Zambia</div>
 </div>
 
 <div class="container">
@@ -493,299 +34,163 @@
     <div></div>
   </div>
 
-  <!-- WELCOMING HERO -->
+  <!-- Hero Welcome -->
   <div class="hero-welcome">
-    <h2><i class="fas fa-hand-peace"></i> Welcome to Zed Tuition</h2>
-    <p>Your free, smart companion for Zambian education — ECZ past papers, notes, and video lessons for Grades 5–12 and Form 1–2. <br> 🎓 Learn smarter, not harder.</p>
-    <div class="hero-badge">
-      <span><i class="fas fa-file-alt"></i> 200+ Docs</span>
-      <span><i class="fas fa-video"></i> 150+ Videos</span>
-      <span><i class="fas fa-globe"></i> Multi-source search</span>
-    </div>
+    <h2><i class="fas fa-chalkboard-user"></i> Explore & Learn</h2>
+    <p>Your gateway to Zambian education — clear learning paths for Primary, Junior Secondary, and Senior Secondary. Click any level to access dedicated resources, notes, and past papers.</p>
   </div>
 
-  <!-- ABOUT US + SERVICES + TOOLS (Info Grid) -->
+  <!-- About + Services Cards -->
   <div class="info-grid">
     <div class="info-card">
-      <i class="fas fa-flag-checkered"></i>
-      <h3>About Us</h3>
-      <p>Zed Tuition was created by Zambian educators to provide free, high-quality learning resources. We aggregate Google Drive documents from trusted sources like ZedMaterial, plus video lessons from YouTube, all aligned with the ECZ curriculum.</p>
+      <i class="fas fa-hand-holding-heart"></i>
+      <h3>Our Mission</h3>
+      <p>Free & accessible learning for every Zambian student. We organize ECZ-aligned resources for Primary 5-7, Form 1-4, and Grade 10-12.</p>
     </div>
     <div class="info-card">
-      <i class="fas fa-concierge-bell"></i>
-      <h3>Our Services</h3>
-      <p>✓ ECZ past papers & revision notes<br>✓ Subject video libraries (Maths, Science, English, etc.)<br>✓ Document sharing & embedded preview<br>✓ Grade 10-12, Form 1-2, Primary 5-7</p>
-    </div>
-    <div class="info-card">
-      <i class="fas fa-tools"></i>
-      <h3>Tools & Features</h3>
-      <div class="tools-list">
-        <span><i class="fas fa-filter"></i> Smart filter</span>
-        <span><i class="fas fa-share-alt"></i> Share docs</span>
-        <span><i class="fas fa-download"></i> Download PDFs</span>
-        <span><i class="fas fa-play-circle"></i> Video embed</span>
-        <span><i class="fas fa-search"></i> Cross-source search</span>
-      </div>
+      <i class="fas fa-chalkboard"></i>
+      <h3>What You'll Find</h3>
+      <p>✓ Subject notes & revision guides<br>✓ ECZ past papers<br>✓ Video lessons & downloadable PDFs<br>✓ Tailored for each education level</p>
     </div>
   </div>
 
-  <!-- SEARCH & FILTER SECTION (documents + videos from local & external) -->
-  <div class="search-section" id="resources">
-    <div class="search-wrapper">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔎 Search for 'Maths grade 10', 'Biology notes', 'ECZ past paper'...">
-        <button id="searchBtn"><i class="fas fa-search"></i> Search</button>
-      </div>
-      <div class="filter-group">
-        <select id="typeFilter">
-          <option value="all">📌 All types</option>
-          <option value="doc">📄 Documents</option>
-          <option value="video">🎬 Videos</option>
-        </select>
-        <select id="levelFilter">
-          <option value="all">🎓 All levels</option>
-          <option value="grade10-12">Senior (10-12)</option>
-          <option value="form1-2">Form 1-2</option>
-          <option value="primary">Primary (5-7)</option>
-        </select>
-        <button id="resetFiltersBtn"><i class="fas fa-undo-alt"></i> Reset</button>
-      </div>
+  <!-- ========= ANIMATED LEVEL CARDS (CLICKABLE PAGES) ========= -->
+  <div class="level-gallery" id="levelGallery">
+    <h2 class="section-title"><i class="fas fa-layer-group"></i> Choose Your Education Level</h2>
+    <div class="levels-container">
+      
+      <!-- Primary Level Card (links to primary.html) -->
+      <a href="primary.html" class="level-link">
+        <div class="level-card">
+          <div class="card-graphic">
+            <i class="fas fa-pencil-ruler" style="color: #FFB347;"></i>
+          </div>
+          <div class="level-info">
+            <h3>Primary 5-7</h3>
+            <div class="subjects-badge">
+              <span>Mathematics</span><span>English</span><span>Science</span><span>Social Studies</span>
+            </div>
+            <p class="level-description">Foundation years · Core skills in numeracy, literacy, and basic sciences. Perfect for upper primary learners.</p>
+          </div>
+        </div>
+      </a>
+
+      <!-- Form 1-2 Card (links to form1-2.html) -->
+      <a href="form1-2.html" class="level-link">
+        <div class="level-card">
+          <div class="card-graphic">
+            <i class="fas fa-flask" style="color: #6CC3FF;"></i>
+          </div>
+          <div class="level-info">
+            <h3>Form 1 - 4</h3>
+            <div class="subjects-badge">
+              <span>Integrated Science</span><span>Mathematics</span><span>English</span><span>Social Studies</span><span>Literature</span>
+            </div>
+            <p class="level-description">Junior Secondary · Broader curriculum, introduction to experimental sciences and analytical subjects.</p>
+          </div>
+        </div>
+      </a>
+
+      <!-- Grade 10-12 Card (links to grade10-12.html) -->
+      <a href="grade10-12.html" class="level-link">
+        <div class="level-card">
+          <div class="card-graphic">
+            <i class="fas fa-graduation-cap" style="color: #D100FF;"></i>
+          </div>
+          <div class="level-info">
+            <h3>Grade 10 - 12</h3>
+            <div class="subjects-badge">
+              <span>Mathematics</span><span>Physics</span><span>Chemistry</span><span>Biology</span><span>English</span><span>History</span><span>Geography</span><span>Civic Ed</span>
+            </div>
+            <p class="level-description">Senior Secondary · ECZ exam preparation, specialized sciences, humanities, and advanced topics.</p>
+          </div>
+        </div>
+      </a>
     </div>
-    <div class="result-stats" id="resultStats">Loading resources...</div>
   </div>
 
-  <!-- Dynamic Resource Grid -->
-  <div id="resourceGrid" class="resource-grid">
-    <div class="no-results"><i class="fas fa-spinner fa-pulse"></i> Loading educational content...</div>
+  <!-- Additional Info: brief note about resources (no search/documents) -->
+  <div style="background: rgba(18,20,30,0.6); border-radius: 1.5rem; padding: 1.2rem; text-align: center; margin: 1rem 0;">
+    <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i>
+    <span style="color: #bdc3e0;">Each level page contains notes, videos, and ECZ past papers. Click on any card above to access full learning materials.</span>
   </div>
-
-  <!-- PAGES (quick links to dedicated level hubs) -->
-  <div class="quick-links">
-    <h3><i class="fas fa-layer-group"></i> Explore our subject hubs</h3>
-    <div class="quick-cards">
-      <a href="grade10-12.html" class="quick-card"><i class="fas fa-graduation-cap"></i> Grade 10-12</a>
-      <a href="form1-2.html" class="quick-card"><i class="fas fa-school"></i> Form 1-2</a>
-      <a href="primary.html" class="quick-card"><i class="fas fa-child"></i> Primary 5-7</a>
-    </div>
-  </div>
+  <div><h2><i class="fas fa-chalkboard-user"></i>Discover</h2></div>
+                  <div class="about-stats">
+                  <div class="stat-card">
+                    <div class="stat-number">500,000+</div>
+                    <div class="stat-label">Users Helped</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Countries Reached</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Educational Resources</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Videos and Docs Update</div>
+                  </div>
+                </div>
+         <!-- ────── About ────── -->
+    <section id="about" style="background: var(--gray-50);">
+      <div class="container">
+        <div class="section-header">
+          <h2>About Zed Tuition,Inc.</h2>
+          <p>We are a developed, focused technology company creating accessible digital education platform.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-text">
+            <h3>Our Story</h3>
+            <p>Zed Tuition started with a simple mission: make quality educational content easily accessible to everyone. It is now becoming public to every country. What began as a passion project has grown into two fully operational platforms used by learners and readers around the world.</p>
+            <p>We believe in building lightweight, fast, and user‑friendly Education website that serve real needs — whether it’s a student looking for chemistry notes or a professional tracking global documents.</p>
+            <a href="#contact" class="btn btn-outline" style="margin-top:0.5rem;">
+              <i class="fa-solid fa-envelope"></i> Get in Touch
+            </a>
+          </div>
+          </div>
+      </div>
+    </section>  
+        <!-- ────── Contact ────── -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2>Contact Us</h2>
+          <p>Have questions, feedback, or registering as a publisher? We'd love to hear from you.</p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="info-item">
+              <i class="fa-solid fa-envelope"></i>
+              <span>Email:zedtuition25@gmail.com<br>Facebook: @zed_tuition</span>
+            </div>
+            <div class="info-item">
+              <i class="fa-solid fa-phone"></i>
+              <span></span>
+            </div>
+            <div class="info-item">
+              <i class="fa-solid fa-location-dot"></i>
+              <span> Address:<br>Lusaka,Zambia<br></span>
+            </div>
+          </div>
+          <div class="contact-links">
+            <h3>Amimo,LLC. Platforms</h3>
+            <a href="https://amimollc.github.io/amimodiscoverynews" target="_blank" rel="noopener" class="site-link">
+              <i class="fa-solid fa-book-open-reader"></i>AD news
+            </a>
+            <a href="https://amimollc.github.io/onplace/" target="_blank" rel="noopener" class="site-link" >
+              <i class="fa-solid fa-globe"></i> Onplace
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   <footer>
-    <i class="fas fa-copyright"></i> 2025 Zed Tuition — Empowering Zambian learners. Freely accessible resources from ZedMaterial, ECZ, and partners.
+    <div>By using this platform,you agree our <a href="terms-conditions.html">terms and conditions</a>. This website also uses the <a href="privacy-policy.html">Privacy-Policy</a> of Amimo LLC</div>
+    <i class="fas fa-copyright"></i> 2025 Zed Tuition — Empowering All learners.All rights reserved.©Zed Tuition,Inc. From Amimo LLC
   </footer>
 </div>
-
-<script>
-  // -------------------- DOCUMENTS (local + external ZedMaterial) --------------------
-  const documentsData = {
-    "grade10-12": [
-      { title: "Progress in Maths Grade 10", id: "1blK7UXeLCWPuNiUzben75qLe3ms1eiAB", subject: "Mathematics", level: "grade10-12", source: "ZedTuition" },
-      { title: "Maths grade 10-12 Study Guide", id: "1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1", subject: "Mathematics", level: "grade10-12", source: "ZedTuition" },
-      { title: "Amplified English grade 10-12", id: "1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu", subject: "English", level: "grade10-12", source: "ZedTuition" },
-      { title: "Biology Zase notes", id: "1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C", subject: "Biology", level: "grade10-12", source: "ZedTuition" },
-      { title: "Physics Q&A", id: "1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO", subject: "Physics", level: "grade10-12", source: "ZedTuition" },
-      { title: "Chemistry amplified notes", id: "1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC", subject: "Chemistry", level: "grade10-12", source: "ZedTuition" },
-      { title: "Civic Education pamphlet", id: "1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8", subject: "Civic", level: "grade10-12", source: "ZedTuition" },
-      { title: "Geography notes", id: "1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO", subject: "Geography", level: "grade10-12", source: "ZedTuition" },
-      { title: "History P1", id: "1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco", subject: "History", level: "grade10-12", source: "ZedTuition" },
-      { title: "Literature in English", id: "1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", subject: "Literature", level: "grade10-12", source: "ZedTuition" }
-    ],
-    "form1-2": [
-      { title: "English Form 1 & 2 Notes", id: "17ItMq9lm6OhUdJ7i8XSGpxCmcPfyBsHD", subject: "English", level: "form1-2", source: "ZedTuition" },
-      { title: "Fast-learn Maths Junior", id: "1lB2ZePnvnqdPgd4rjX75CdQBR9XX5_nF", subject: "Mathematics", level: "form1-2", source: "ZedTuition" },
-      { title: "Integrated Science Form 1-2", id: "15Ykhm38JQoOxzIRiUpPRJTSpJck9Ktd6", subject: "Science", level: "form1-2", source: "ZedTuition" },
-      { title: "Literature Form 1", id: "1IoT_TJUwzB_m66ffor7jO5-nCwqpU6Tp", subject: "Literature", level: "form1-2", source: "ZedTuition" },
-      { title: "Social Studies Junior", id: "1TYZKvFQrISYWQSLTUJ2SXOYeuL9fHW", subject: "Social Studies", level: "form1-2", source: "ZedTuition" }
-    ],
-    "primary": [
-      { title: "Fast-learn Maths Grade 5-7", id: "1lB2ZePnvnqdPgd4rjX75CdQBR9XX5_nF", subject: "Mathematics", level: "primary", source: "ZedTuition" },
-      { title: "English Grade 5-7", id: "17ItMq9lm6OhUdJ7i8XSGpxCmcPfyBsHD", subject: "English", level: "primary", source: "ZedTuition" },
-      { title: "Science Primary 5-7", id: "15Ykhm38JQoOxzIRiUpPRJTSpJck9Ktd6", subject: "Science", level: "primary", source: "ZedTuition" },
-      { title: "Social Studies G5-7", id: "1TYZKvFQrISYWQSLTUJ2SXOYeuL9fHW", subject: "Social Studies", level: "primary", source: "ZedTuition" },
-      { title: "Revision Pamphlet", id: "1yiV3SO9AUgDVBhw-j6RS8xr8bnRrEJCI", subject: "Exam Prep", level: "primary", source: "ZedTuition" }
-    ]
-  };
-
-  // External sources (simulating ZedMaterial & other drive docs)
-  const externalDocs = [
-    { title: "ECZ Mathematics Past Papers (2015-2022)", id: "1ABCDefgHijkLmNoPqRsTuVwXyZ", subject: "Mathematics", level: "grade10-12", source: "ZedMaterial", external: true },
-    { title: "English Comprehension & Summary – Grade 12", id: "1ExterNalDocId2", subject: "English", level: "grade10-12", source: "ZedMaterial", external: true },
-    { title: "Science Practical Guide (Form 2)", id: "1ExtFakeIdScience", subject: "Science", level: "form1-2", source: "ZedMaterial", external: true },
-    { title: "Primary Maths Workbooks (Grade 7)", id: "1PrimMathExt", subject: "Mathematics", level: "primary", source: "ZedMaterial", external: true }
-  ];
-
-  let allDocs = [];
-  for (const level in documentsData) {
-    allDocs.push(...documentsData[level].map(d => ({ ...d, type: "doc" })));
-  }
-  externalDocs.forEach(ext => { allDocs.push({ ...ext, type: "doc", external: true }); });
-
-  // ----- VIDEO SOURCES -----
-  let videoResources = [];
-
-  async function fetchVideos() {
-    try {
-      const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://amimollc.github.io/extralearnsearch");
-      const response = await fetch(proxyUrl);
-      if (!response.ok) throw new Error();
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const links = doc.querySelectorAll("a");
-      const videos = [];
-      links.forEach(link => {
-        let href = link.href;
-        if (href.includes("youtube.com/watch") || href.includes("youtu.be/")) {
-          let title = link.textContent.trim() || "Video lesson";
-          let fullText = (title + " " + (link.parentElement?.innerText || "")).toLowerCase();
-          let level = "grade10-12";
-          if (fullText.includes("form 1") || fullText.includes("form 2") || fullText.includes("junior") || fullText.includes("grade 8") || fullText.includes("grade 9")) level = "form1-2";
-          else if (fullText.includes("grade 5") || fullText.includes("grade 6") || fullText.includes("grade 7") || fullText.includes("primary")) level = "primary";
-          
-          let videoId = "";
-          if (href.includes("youtu.be/")) videoId = href.split("youtu.be/")[1]?.split(/[?#]/)[0];
-          else if (href.includes("v=")) videoId = href.split("v=")[1]?.split("&")[0];
-          if (videoId && !videos.some(v => v.id === videoId)) {
-            videos.push({
-              title: title.substring(0, 80),
-              id: videoId,
-              level: level,
-              type: "video",
-              thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`,
-              embedUrl: `https://www.youtube.com/embed/${videoId}`,
-              source: "extralearnsearch"
-            });
-          }
-        }
-      });
-      if (videos.length === 0) throw new Error();
-      return videos.slice(0, 40);
-    } catch (err) {
-      return [
-        { title: "ECZ Grade 12 Maths Revision", id: "dQw4w9WgXcQ", level: "grade10-12", type: "video", thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", source: "fallback" },
-        { title: "Physics: Newton's Laws (Gr 10-12)", id: "mGqUYcXqMjU", level: "grade10-12", type: "video", thumbnail: "https://img.youtube.com/vi/mGqUYcXqMjU/mqdefault.jpg", embedUrl: "https://www.youtube.com/embed/mGqUYcXqMjU", source: "fallback" },
-        { title: "Form 1 English - Parts of Speech", id: "o4X5DvVYw3c", level: "form1-2", type: "video", thumbnail: "https://img.youtube.com/vi/o4X5DvVYw3c/mqdefault.jpg", embedUrl: "https://www.youtube.com/embed/o4X5DvVYw3c", source: "fallback" },
-        { title: "Algebra for Form 2", id: "L3LMbpZIKhQ", level: "form1-2", type: "video", thumbnail: "https://img.youtube.com/vi/L3LMbpZIKhQ/mqdefault.jpg", embedUrl: "https://www.youtube.com/embed/L3LMbpZIKhQ", source: "fallback" },
-        { title: "Primary Maths: Fractions Made Easy", id: "CPTqfpVpbzE", level: "primary", type: "video", thumbnail: "https://img.youtube.com/vi/CPTqfpVpbzE/mqdefault.jpg", embedUrl: "https://www.youtube.com/embed/CPTqfpVpbzE", source: "fallback" }
-      ];
-    }
-  }
-
-  let combinedResources = [];
-
-  async function initResources() {
-    const videos = await fetchVideos();
-    videoResources = videos;
-    combinedResources = [...allDocs, ...videoResources];
-    renderResources();
-  }
-
-  function renderResources() {
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const typeVal = document.getElementById("typeFilter").value;
-    const levelVal = document.getElementById("levelFilter").value;
-
-    let filtered = combinedResources.filter(item => {
-      let matchesSearch = item.title.toLowerCase().includes(searchTerm) || (item.subject && item.subject.toLowerCase().includes(searchTerm));
-      let matchesType = (typeVal === "all") || (typeVal === item.type);
-      let matchesLevel = (levelVal === "all") || (item.level === levelVal);
-      return matchesSearch && matchesType && matchesLevel;
-    });
-
-    const grid = document.getElementById("resourceGrid");
-    const statsSpan = document.getElementById("resultStats");
-    statsSpan.innerHTML = `<i class="fas fa-database"></i> ${filtered.length} resources (${filtered.filter(i=>i.type==="doc").length} docs, ${filtered.filter(i=>i.type==="video").length} videos) — including ZedMaterial external sources`;
-
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div class="no-results"><i class="fas fa-frown"></i> No results. Try a broader search or browse level hubs.</div>`;
-      return;
-    }
-
-    grid.innerHTML = "";
-    filtered.forEach(res => {
-      const card = document.createElement("div");
-      card.className = "resource-card";
-      const levelDisplay = { "grade10-12":"Senior", "form1-2":"Form 1-2", "primary":"Primary" }[res.level] || res.level;
-      let badgeClass = "badge-doc";
-      let badgeIcon = "📄";
-      if (res.type === "video") { badgeClass = "badge-video"; badgeIcon = "🎬"; }
-      else if (res.external) { badgeClass = "badge-external"; badgeIcon = "🌍"; }
-      
-      let thumbnailUrl = "";
-      if (res.type === "doc") {
-        thumbnailUrl = `https://drive.google.com/thumbnail?id=${res.id}&sz=w200`;
-        if (res.external && !res.id.includes("1blK")) thumbnailUrl = "https://placehold.co/400x200/1e1f2e/7c5cff?text=External+Doc";
-      } else {
-        thumbnailUrl = res.thumbnail;
-      }
-
-      card.innerHTML = `
-        <div class="thumbnail-area">
-          <img src="${thumbnailUrl}" alt="thumbnail" onerror="this.src='https://placehold.co/400x200/1a1d2b/7c5cff?text=Preview'">
-          <span class="badge-type ${badgeClass}">${badgeIcon} ${res.type === "doc" ? "Document" : "Video"} ${res.external ? "· External" : ""}</span>
-        </div>
-        <div class="card-content">
-          <h4>${escapeHtml(res.title)}</h4>
-          <div class="card-meta"><span>${res.subject || "Resource"} <i class="fas fa-source"></i> ${res.source || "ZedTuition"}</span><span class="level-tag">${levelDisplay}</span></div>
-        </div>
-      `;
-      card.addEventListener("click", () => {
-        if (res.type === "doc") openDocViewer(res.id);
-        else openVideoModal(res.embedUrl);
-      });
-      grid.appendChild(card);
-    });
-  }
-
-  function openDocViewer(docId) {
-    const modal = document.createElement("div");
-    modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:20000; display:flex; align-items:center; justify-content:center; flex-direction:column;";
-    modal.innerHTML = `
-      <div style="background:#0f0f0f; width:90%; max-width:1000px; border-radius:12px; overflow:hidden;">
-        <div style="display:flex; justify-content:flex-end; padding:8px;"><button id="closeModalBtn" style="background:#7c5cff; border:none; padding:6px 14px; border-radius:30px; color:white; cursor:pointer;"><i class="fas fa-times"></i> Close</button></div>
-        <iframe src="https://drive.google.com/file/d/${docId}/preview" width="100%" height="500px" frameborder="0" allowfullscreen></iframe>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById("closeModalBtn").onclick = () => modal.remove();
-  }
-
-  function openVideoModal(videoUrl) {
-    const modalDiv = document.createElement("div");
-    modalDiv.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:30000; display:flex; align-items:center; justify-content:center; flex-direction:column;";
-    modalDiv.innerHTML = `
-      <div style="background:#000; width:90%; max-width:880px;">
-        <iframe width="100%" height="450" src="${videoUrl}?autoplay=1" frameborder="0" allowfullscreen></iframe>
-        <button style="margin:15px auto; background:#7c5cff; border:none; padding:8px 22px; border-radius:30px; color:white; cursor:pointer; display:block;" onclick="this.closest('#dynamicVideoModal').remove()"><i class="fas fa-times"></i> Close</button>
-      </div>
-    `;
-    modalDiv.id = "dynamicVideoModal";
-    document.body.appendChild(modalDiv);
-    modalDiv.querySelector("button").onclick = () => modalDiv.remove();
-  }
-
-  function escapeHtml(str) { return str?.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])) || ""; }
-
-  // Sidebar & interactions
-  const hamburger = document.getElementById("hamburgerBtn");
-  const sidebar = document.getElementById("sidebar");
-  const overlay = document.getElementById("overlayBlur");
-  function closeSidebar() { sidebar.classList.remove("open"); overlay.classList.remove("active"); }
-  function openSidebar() { sidebar.classList.add("open"); overlay.classList.add("active"); }
-  hamburger.addEventListener("click", openSidebar);
-  document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
-  overlay.addEventListener("click", closeSidebar);
-
-  document.getElementById("searchBtn").addEventListener("click", () => renderResources());
-  document.getElementById("searchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") renderResources(); });
-  document.getElementById("typeFilter").addEventListener("change", () => renderResources());
-  document.getElementById("levelFilter").addEventListener("change", () => renderResources());
-  document.getElementById("resetFiltersBtn").addEventListener("click", () => {
-    document.getElementById("searchInput").value = "";
-    document.getElementById("typeFilter").value = "all";
-    document.getElementById("levelFilter").value = "all";
-    renderResources();
-  });
-
-  initResources();
-</script>
+<script src="main.js"></script>
 </body>
-    </html>
+  </html>
