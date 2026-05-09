@@ -18,4 +18,22 @@
     <priority>0.8</priority>
   </url>
   -->
+  <url>
+    <loc>https://amimollc.github.io/zedtuition/grade10-12.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amimollc.github.io/zedtuition/form1-4.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://amimollc.github.io/zedtuition/primary.html</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 </urlset>
