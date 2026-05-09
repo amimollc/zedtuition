@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Point to your sitemap
-Sitemap: https://amimollc.github.io/sitemap.xml
+Sitemap: https://amimollc.github.io/zedtuition/sitemap.xml
