@@ -1,0 +1,6 @@
+# Allow all crawlers to access everything
+User-agent: *
+Allow: /
+
+# Point to your sitemap
+Sitemap: https://amimollc.github.io/sitemap.xml
