@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Viewer | Zed Tuition</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{
+    background:#0f0f0f;
+    color:#eaeaea;
+    font-family:'Segoe UI',Roboto,Arial;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    overflow:hidden;
+  }
+  /* TOP BAR */
+  .top-bar{
+    background:#1a1a1a;
+    padding:12px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #2a2a2a;
+    flex-shrink:0;
+    flex-wrap:wrap;
+  }
+  .top-bar .left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+  }
+  .top-bar .left a{
+    color:#aaa;
+    text-decoration:none;
+    font-size:20px;
+    transition:color 0.2s;
+  }
+  .top-bar .left a:hover{ color:#fff; }
+  .top-bar .doc-info{
+    display:flex;
+    flex-direction:column;
+  }
+  .top-bar .doc-info .title{
+    font-size:18px;
+    font-weight:600;
+  }
+  .top-bar .doc-info .meta{
+    font-size:13px;
+    color:#aaa;
+  }
+  .top-bar .actions{
+    display:flex;
+    gap:16px;
+    align-items:center;
+  }
+  .top-bar .actions button{
+    background:none;
+    border:none;
+    color:#ccc;
+    font-size:18px;
+    cursor:pointer;
+    padding:8px;
+    border-radius:6px;
+    transition:background 0.2s, color 0.2s;
+  }
+  .top-bar .actions button:hover{
+    background:#333;
+    color:#fff;
+  }
+  .top-bar .actions .share-btn{ color:#7c5cff; }
+  .top-bar .actions .share-btn:hover{ color:#9b7cff; }
+
+  /* DOCUMENT IFRAME */
+  .doc-container{
+    flex:1;
+    background:#000;
+    padding:10px;
+    overflow:hidden;
+  }
+  .doc-container iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    border-radius:8px;
+    background:#fff;
+  }
+
+  /* BOTTOM: DESCRIPTION + RELATED */
+  .bottom-section{
+    background:#161616;
+    border-top:1px solid #2a2a2a;
+    padding:15px 24px;
+    flex-shrink:0;
+    max-height:200px;
+    overflow-y:auto;
+  }
+  .bottom-section .desc{
+    margin-bottom:12px;
+  }
+  .bottom-section .desc .uploader{
+    font-size:14px;
+    color:#aaa;
+  }
+  .bottom-section .desc .uploader i{ margin-right:6px; }
+  .bottom-section .related h4{
+    margin-bottom:8px;
+    font-weight:400;
+    color:#aaa;
+    font-size:15px;
+  }
+  .bottom-section .related-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .bottom-section .related-list .related-item{
+    background:#222;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+    transition:background 0.2s;
+    color:#d0d0d0;
+  }
+  .bottom-section .related-list .related-item:hover{
+    background:#7c5cff;
+    color:#fff;
+  }
+  .loading{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    color:#aaa;
+    font-size:18px;
+  }
+</style>
+</head>
+<body>
+<!-- TOP BAR -->
+<div class="top-bar" id="topBar">
+  <div class="left">
+    <a href="grade10-12.html" title="Back to Documents"><i class="fas fa-arrow-left"></i></a>
+    <div class="doc-info">
+      <span class="title" id="docTitle">Loading...</span>
+      <span class="meta" id="docMeta">Subject · Uploader</span>
+    </div>
+  </div>
+  <div class="actions">
+    <button id="shareBtn" class="share-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+    <button id="downloadBtn" title="Download"><i class="fas fa-download"></i></button>
+  </div>
+</div>
+
+<!-- DOCUMENT IFRAME -->
+<div class="doc-container" id="docContainer">
+  <div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading document...</div>
+</div>
+
+<!-- BOTTOM SECTION -->
+<div class="bottom-section" id="bottomSection">
+  <div class="desc">
+    <p id="docDesc">Description</p>
+    <p class="uploader"><i class="fas fa-user"></i> <span id="docUploader">Uploader</span></p>
+  </div>
+  <div class="related">
+    <h4><i class="fas fa-book-open"></i> Related Documents</h4>
+    <div class="related-list" id="relatedList"></div>
+  </div>
+</div>
+
+<script>
+// ---------- METADATA (same as grade10-12) ----------
+// We'll replicate the subjects object here (or fetch from a JSON).
+// For simplicity, we embed it again.
+const subjects = {
+ "Mathematics":[
+  {title:"Progress in Maths Grade 10", id:"1blK7UXeLCWPuNiUzben75qLe3ms1eiAB", desc:"Comprehensive guide for Grade 10 Maths", uploader:"ZedTuition Team"},
+  {title:"Maths grade 10-12 P1 mr 6 points", id:"1OkniiwTpHhm7LE5b5JjTVAWDM7wPjYyn", desc:"Past paper solutions", uploader:"Mr. Six Points"},
+  {title:"Maths grade 10-12 Study Guide", id:"1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1", desc:"Complete study guide", uploader:"ECZ"},
+  {title:"Progress in maths grade 11", id:"1i2JskliFE3GpAHL_LkENowVzdWlQ4M4a", desc:"Grade 11 progress", uploader:"ZedTuition"},
+  {title:"Mathematics grade 10-12 Q&A", id:"12GIIPI8kd8TT6vvhDIWq01gmUjb4m0Qr", desc:"Questions and answers", uploader:"ECZ"}
+ ],
+ "English":[
+  {title:"Amplified English grade 10-12", id:"1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu", desc:"Amplified notes", uploader:"Amplified"},
+  {title:"ECZ English grade 10 to 12", id:"1J-uOuMPrGDPx0W8jnCNQhr2qfY9PkDtS", desc:"ECZ syllabus", uploader:"ECZ"},
+  {title:"ECZ English grade 12 P1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Paper 1 revision", uploader:"ECZ"}
+ ],
+ "Biology":[
+  {title:"Biology Zase notes", id:"1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C", desc:"Zase notes", uploader:"Zase"},
+  {title:"Biology grade 10-12", id:"1IP-nHH70Chi96-dWfu5yeBB5HvyFwS1m", desc:"Full biology", uploader:"ZedTuition"},
+  {title:"Biology Notes", id:"1I0FArIPg0hfmZyTTSZNWCO_UzLxYjCIy", desc:"Concise notes", uploader:"ZedTuition"}
+ ],
+ "Physics":[
+  {title:"Physics Question and answers", id:"1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO", desc:"Q&A", uploader:"ZedTuition"},
+  {title:"Physics syllabus", id:"1ESmSyYzDHLyEIQRl0hPHzO8h1A57jJz5", desc:"Syllabus", uploader:"ECZ"},
+  {title:"Physics Notes", id:"1IwzRCG-B-_Oh1uqjWYNjnvkwa4STyZsD", desc:"Notes", uploader:"ZedTuition"}
+ ],
+ "Chemistry":[
+  {title:"Chemistry grade 10-12", id:"1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC", desc:"Full chemistry", uploader:"ZedTuition"},
+  {title:"Chemistry amplified notes", id:"1Ie1XJogzpobaR56C29SQ6Zgggat5Vduh", desc:"Amplified", uploader:"Amplified"}
+ ],
+ "Civic":[
+  {title:"Civic grade 10-12", id:"1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8", desc:"Civic notes", uploader:"ZedTuition"},
+  {title:"Civic pamphlet", id:"1JC-ojT72GQmLm_uJjoXx8gVmuj9arqRg", desc:"Pamphlet", uploader:"ECZ"}
+ ],
+ "Geography":[
+  {title:"Geography notes", id:"1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO", desc:"Geography", uploader:"ZedTuition"}
+ ],
+ "History":[ {title:"History P1", id:"1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco", desc:"Paper 1", uploader:"ECZ"} ],
+ "Account":[ {title:"Account P1", id:"1Iaz8GLmQiCffCWSJWr2rnyIpvc0ime8u", desc:"Paper 1", uploader:"ECZ"} ],
+ "Literature in English":[
+  {title:"Literature Doc 1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Literature", uploader:"ECZ"},
+  {title:"Literature Doc 2", id:"1Iy44N0OycGsUsVARci4hSdSByM-40-Kn", desc:"Literature notes", uploader:"ZedTuition"}
+ ],
+ "Religious Education":[ {title:"RE notes", id:"1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11", desc:"RE", uploader:"ZedTuition"} ]
+};
+
+// Flatten all docs into an array for easy lookup
+const allDocs = [];
+Object.keys(subjects).forEach(sub => {
+  subjects[sub].forEach(doc => {
+    allDocs.push({ ...doc, subject: sub });
+  });
+});
+
+// ---------- GET DOC ID FROM URL ----------
+const params = new URLSearchParams(window.location.search);
+const docId = params.get('doc');
+let currentDoc = null;
+
+// ---------- RENDER VIEWER ----------
+function renderDoc(id){
+  const doc = allDocs.find(d => d.id === id);
+  if(!doc){
+    document.getElementById('docTitle').textContent = 'Document not found';
+    document.getElementById('docMeta').textContent = 'Please go back';
+    document.getElementById('docContainer').innerHTML = '<div class="loading"><i class="fas fa-exclamation-circle"></i> Document not found</div>';
+    return;
+  }
+  currentDoc = doc;
+  // Update top bar
+  document.getElementById('docTitle').textContent = doc.title;
+  document.getElementById('docMeta').textContent = `${doc.subject} · ${doc.uploader}`;
+  // Update description
+  document.getElementById('docDesc').textContent = doc.desc || 'No description available.';
+  document.getElementById('docUploader').textContent = doc.uploader || 'Unknown';
+  // Embed document
+  const container = document.getElementById('docContainer');
+  container.innerHTML = `<iframe src="https://drive.google.com/file/d/${doc.id}/preview" allowfullscreen></iframe>`;
+  // Update related docs (exclude current)
+  const related = allDocs.filter(d => d.id !== doc.id && d.subject === doc.subject).slice(0, 6);
+  const relatedList = document.getElementById('relatedList');
+  relatedList.innerHTML = '';
+  if(related.length === 0){
+    relatedList.innerHTML = '<span style="color:#666; font-size:14px;">No related documents in this subject.</span>';
+  } else {
+    related.forEach(rel => {
+      const span = document.createElement('span');
+      span.className = 'related-item';
+      span.textContent = rel.title;
+      span.onclick = () => { window.location.href = `viewer.html?doc=${rel.id}`; };
+      relatedList.appendChild(span);
+    });
+  }
+  // Update share button
+  document.getElementById('shareBtn').onclick = () => shareDoc(id);
+  // Update download button
+  document.getElementById('downloadBtn').onclick = () => downloadDoc(id);
+}
+
+// ---------- SHARE ----------
+function shareDoc(id){
+  const link = `${window.location.origin}${window.location.pathname}?doc=${id}`;
+  if(navigator.share){
+    navigator.share({title:"Zed Tuition Document", url:link});
+  } else {
+    navigator.clipboard.writeText(link).then(()=>alert("Link copied to clipboard!"));
+  }
+}
+
+// ---------- DOWNLOAD (direct Google Drive download) ----------
+function downloadDoc(id){
+  // Google Drive direct download link
+  const downloadUrl = `https://drive.google.com/uc?export=download&id=${id}`;
+  window.open(downloadUrl, '_blank');
+}
+
+// ---------- INIT ----------
+if(docId){
+  renderDoc(docId);
+} else {
+  // No doc ID – show error
+  document.getElementById('docTitle').textContent = 'No document selected';
+  document.getElementById('docMeta').textContent = 'Please go back and choose a document.';
+  document.getElementById('docContainer').innerHTML = '<div class="loading"><i class="fas fa-info-circle"></i> No document ID provided</div>';
+}
+</script>
+</body>
+</html>
