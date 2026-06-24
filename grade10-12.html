@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 10-12 | Zed Tuition - Documents</title>
+<title>Grade 10-12 | Zed Tuition</title>
+<!-- Font Awesome (online icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   :root{
     --bg:#0f0f0f;
@@ -11,8 +13,9 @@
     --hover:#1f1f1f;
     --text:#eaeaea;
     --border:#2a2a2a;
-    --accent:#7c5cff;
+    --accent:#7c5cff;  /* Purple theme */
   }
+  *{ margin:0; padding:0; box-sizing:border-box; }
   body{
     background:var(--bg);
     color:var(--text);
@@ -21,46 +24,54 @@
     margin:auto;
     padding:15px;
   }
-  h1{ text-align:center; font-weight:300; }
-  .nav-home{ text-align:right; margin-bottom:10px; }
+  h1{ text-align:center; font-weight:300; margin:20px 0; }
+  .nav-home{ text-align:right; margin-bottom:20px; }
   .nav-home a{ color:var(--accent); text-decoration:none; font-weight:500; }
-  .subject-title{ margin:30px 0 10px; font-size:22px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  .nav-home a i{ margin-right:6px; }
+  .subject-title{ margin:30px 0 12px; font-size:22px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  
   .doc-banner{
     background:var(--card); border:1px solid var(--border); border-radius:8px; padding:12px;
     display:flex; align-items:center; margin-bottom:10px; position:relative; cursor:pointer;
+    transition:background 0.2s;
   }
   .doc-banner:hover{ background:var(--hover); }
   .thumbnail{ width:60px; height:80px; margin-right:15px; background:#222; border-radius:4px; overflow:hidden; flex-shrink:0; }
   .thumbnail img{ width:100%; height:100%; object-fit:cover; }
-  .doc-title{ flex:1; }
-  .menu-btn{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:0 10px; }
-  .menu-box{ position:absolute; right:10px; top:45px; background:#1b1b1b; border:1px solid #333; border-radius:8px; width:200px; display:none; z-index:20; }
+  .doc-title{ flex:1; font-weight:500; }
+  .menu-btn{ background:none; border:none; color:#fff; font-size:20px; cursor:pointer; padding:0 10px; }
+  .menu-box{ position:absolute; right:10px; top:45px; background:#1b1b1b; border:1px solid #333; border-radius:8px; width:180px; display:none; z-index:20; }
   .menu-box.active{ display:block; }
-  .menu-box button{ width:100%; background:none; border:none; color:#fff; padding:10px; text-align:left; cursor:pointer; }
+  .menu-box button{ width:100%; background:none; border:none; color:#fff; padding:10px 14px; text-align:left; cursor:pointer; font-size:14px; }
   .menu-box button:hover{ background:#333; }
-  #viewer{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:10000; align-items:center; justify-content:center; }
-  #viewer.active{ display:flex; }
-  #viewer iframe{ width:90%; height:90%; border:none; border-radius:8px; }
-  #closeViewer{ position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:#fff; z-index:10001; background:rgba(0,0,0,0.5); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-  .show-more{ padding:10px; text-align:center; background:var(--accent); border-radius:6px; cursor:pointer; margin-bottom:15px; color:#fff; font-weight:500; }
+  .menu-box button i{ margin-right:10px; width:18px; }
+
+  /* PURPLE "SHOW MORE" BUTTON */
+  .show-more{
+    padding:12px;
+    text-align:center;
+    background:var(--accent);  /* Purple */
+    border-radius:6px;
+    cursor:pointer;
+    margin-bottom:15px;
+    color:#fff;
+    font-weight:600;
+    transition:opacity 0.2s;
+  }
+  .show-more:hover{ opacity:0.85; }
+  .show-more i{ margin-right:8px; }
+
+  /* MODAL OVERLAY */
   .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:9999; }
   .popup{ background:#121212; padding:20px; border-radius:10px; max-width:850px; width:90%; max-height:80vh; overflow:auto; }
+  .popup h2{ margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:8px; }
   .btn-close{ background:#444; color:#fff; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; margin-top:10px; }
-  #shareOptions button{ background:#333; color:#fff; border:none; padding:10px 15px; border-radius:6px; margin:5px; cursor:pointer; }
-  #shareOptions button:hover{ background:#555; }
+  .btn-close i{ margin-right:6px; }
 </style>
 </head>
 <body>
-<div class="nav-home"><a href="../index.html">🏠 Back to Home</a></div>
-<h1>📘 Grade 10-12 Documents</h1>
-
-<!-- Viewer Overlay -->
-<div id="viewer">
-  <div id="closeViewer" onclick="closeViewer()">✕</div>
-  <iframe id="viewerFrame" src=""></iframe>
-</div>
-
-<!-- Document List -->
+<div class="nav-home"><a href="../index.html"><i class="fas fa-home"></i> Back to Home</a></div>
+<h1><i class="fas fa-graduation-cap"></i> Grade 10-12 Documents</h1>
 <div id="docList"></div>
 
 <!-- "Show More" Modal -->
@@ -68,139 +79,148 @@
   <div class="popup">
     <h2 id="modalTitle"></h2>
     <div id="modalDocs"></div>
-    <button class="btn-close" onclick="closeModal()">Close</button>
-  </div>
-</div>
-
-<!-- Share Modal -->
-<div id="shareModal" class="overlay">
-  <div class="popup">
-    <h3>Share Document</h3>
-    <div id="shareOptions"></div>
-    <button class="btn-close" onclick="closeShare()">Close</button>
+    <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
   </div>
 </div>
 
 <script>
-// ---------- DOCUMENTS DATA (Grade 10-12) ----------
+// ---------- COMPLETE DOCUMENT DATABASE (ALL FILES) ----------
 const subjects = {
  "Mathematics":[
-  {title:"Progress in Maths Grade 10",id:"1blK7UXeLCWPuNiUzben75qLe3ms1eiAB"},
-  {title:"Maths grade 10-12 P1 mr 6 points",id:"1OkniiwTpHhm7LE5b5JjTVAWDM7wPjYyn"},
-  {title:"Maths grade 10-12 Study Guide",id:"1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1"},
-  {title:"Progress in maths grade 11",id:"1i2JskliFE3GpAHL_LkENowVzdWlQ4M4a"},
-  {title:"Mathematics grade 10-12 Q&A",id:"12GIIPI8kd8TT6vvhDIWq01gmUjb4m0Qr"}
+  {title:"Progress in Maths Grade 10", id:"1blK7UXeLCWPuNiUzben75qLe3ms1eiAB", desc:"Comprehensive guide for Grade 10 Maths", uploader:"ZedTuition Team"},
+  {title:"Maths grade 10-12 P1 mr 6 points", id:"1OkniiwTpHhm7LE5b5JjTVAWDM7wPjYyn", desc:"Past paper solutions", uploader:"Mr. Six Points"},
+  {title:"Maths grade 10-12 Study Guide", id:"1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1", desc:"Complete study guide", uploader:"ECZ"},
+  {title:"Progress in maths grade 11", id:"1i2JskliFE3GpAHL_LkENowVzdWlQ4M4a", desc:"Grade 11 progress", uploader:"ZedTuition"},
+  {title:"Mathematics grade 10-12 Q&A", id:"12GIIPI8kd8TT6vvhDIWq01gmUjb4m0Qr", desc:"Questions and answers", uploader:"ECZ"}
  ],
  "English":[
-  {title:"Amplified English grade 10-12",id:"1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu"},
-  {title:"ECZ English grade 10 to 12",id:"1J-uOuMPrGDPx0W8jnCNQhr2qfY9PkDtS"},
-  {title:"ECZ English grade 12 P1",id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl"}
+  {title:"Amplified English grade 10-12", id:"1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu", desc:"Amplified notes", uploader:"Amplified"},
+  {title:"ECZ English grade 10 to 12", id:"1J-uOuMPrGDPx0W8jnCNQhr2qfY9PkDtS", desc:"ECZ syllabus", uploader:"ECZ"},
+  {title:"ECZ English grade 12 P1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Paper 1 revision", uploader:"ECZ"}
  ],
  "Biology":[
-  {title:"Biology Zase notes",id:"1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C"},
-  {title:"Biology grade 10-12",id:"1IP-nHH70Chi96-dWfu5yeBB5HvyFwS1m"},
-  {title:"Biology Notes",id:"1I0FArIPg0hfmZyTTSZNWCO_UzLxYjCIy"}
+  {title:"Biology Zase notes", id:"1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C", desc:"Zase notes", uploader:"Zase"},
+  {title:"Biology grade 10-12", id:"1IP-nHH70Chi96-dWfu5yeBB5HvyFwS1m", desc:"Full biology", uploader:"ZedTuition"},
+  {title:"Biology Notes", id:"1I0FArIPg0hfmZyTTSZNWCO_UzLxYjCIy", desc:"Concise notes", uploader:"ZedTuition"}
  ],
  "Physics":[
-  {title:"Physics Question and answers",id:"1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO"},
-  {title:"Physics syllabus",id:"1ESmSyYzDHLyEIQRl0hPHzO8h1A57jJz5"},
-  {title:"Physics Notes",id:"1IwzRCG-B-_Oh1uqjWYNjnvkwa4STyZsD"}
+  {title:"Physics Question and answers", id:"1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO", desc:"Q&A", uploader:"ZedTuition"},
+  {title:"Physics syllabus", id:"1ESmSyYzDHLyEIQRl0hPHzO8h1A57jJz5", desc:"Syllabus", uploader:"ECZ"},
+  {title:"Physics Notes", id:"1IwzRCG-B-_Oh1uqjWYNjnvkwa4STyZsD", desc:"Notes", uploader:"ZedTuition"}
  ],
  "Chemistry":[
-  {title:"Chemistry grade 10-12",id:"1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC"},
-  {title:"Chemistry amplified notes",id:"1Ie1XJogzpobaR56C29SQ6Zgggat5Vduh"}
+  {title:"Chemistry grade 10-12", id:"1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC", desc:"Full chemistry", uploader:"ZedTuition"},
+  {title:"Chemistry amplified notes", id:"1Ie1XJogzpobaR56C29SQ6Zgggat5Vduh", desc:"Amplified", uploader:"Amplified"}
  ],
  "Civic":[
-  {title:"Civic grade 10-12",id:"1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8"},
-  {title:"Civic pamphlet",id:"1JC-ojT72GQmLm_uJjoXx8gVmuj9arqRg"}
+  {title:"Civic grade 10-12", id:"1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8", desc:"Civic notes", uploader:"ZedTuition"},
+  {title:"Civic pamphlet", id:"1JC-ojT72GQmLm_uJjoXx8gVmuj9arqRg", desc:"Pamphlet", uploader:"ECZ"}
  ],
  "Geography":[
-  {title:"Geography notes",id:"1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO"}
+  {title:"Geography notes", id:"1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO", desc:"Geography", uploader:"ZedTuition"}
  ],
- "History":[ {title:"History P1",id:"1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco"} ],
- "Account":[ {title:"Account P1",id:"1Iaz8GLmQiCffCWSJWr2rnyIpvc0ime8u"} ],
+ "History":[ 
+  {title:"History P1", id:"1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco", desc:"Paper 1", uploader:"ECZ"} 
+ ],
+ "Account":[ 
+  {title:"Account P1", id:"1Iaz8GLmQiCffCWSJWr2rnyIpvc0ime8u", desc:"Paper 1", uploader:"ECZ"} 
+ ],
  "Literature in English":[
-  {title:"Literature Doc 1",id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl"},
-  {title:"Literature Doc 2",id:"1Iy44N0OycGsUsVARci4hSdSByM-40-Kn"}
+  {title:"Literature Doc 1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Literature", uploader:"ECZ"},
+  {title:"Literature Doc 2", id:"1Iy44N0OycGsUsVARci4hSdSByM-40-Kn", desc:"Literature notes", uploader:"ZedTuition"}
  ],
- "Religious Education":[ {title:"RE notes",id:"1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11"} ]
+ "Religious Education":[ 
+  {title:"RE notes", id:"1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11", desc:"RE", uploader:"ZedTuition"} 
+ ]
 };
 
-// ---------- BUILD DOCUMENT LIST ----------
+// ---------- BUILD LIST (FIRST 2 VISIBLE + PURPLE "SHOW MORE") ----------
 const listDiv = document.getElementById("docList");
+
 function buildDocList(){
-  Object.keys(subjects).forEach(sub=>{
+  Object.keys(subjects).forEach(sub => {
+    // Subject header
     const titleDiv = document.createElement("div");
-    titleDiv.className="subject-title"; titleDiv.textContent=sub;
+    titleDiv.className = "subject-title";
+    titleDiv.textContent = sub;
     listDiv.appendChild(titleDiv);
+
     const docs = subjects[sub];
-    docs.slice(0,2).forEach(d=>listDiv.appendChild(createDocCard(d)));
-    if(docs.length>2){
+    
+    // Show first 2 documents
+    docs.slice(0, 2).forEach(doc => {
+      listDiv.appendChild(createDocCard(doc));
+    });
+
+    // If there are more than 2, add the PURPLE "Show more" button
+    if(docs.length > 2){
       const moreBtn = document.createElement("div");
-      moreBtn.className="show-more"; moreBtn.textContent="Show more";
-      moreBtn.onclick = ()=>openModal(sub, docs);
+      moreBtn.className = "show-more";
+      moreBtn.innerHTML = `<i class="fas fa-chevron-down"></i> Show more (${docs.length - 2} more)`;
+      moreBtn.onclick = (() => openModal(sub, docs));
       listDiv.appendChild(moreBtn);
     }
   });
 }
+
 function createDocCard(doc){
-  const b = document.createElement("div"); b.className="doc-banner";
-  b.innerHTML = `<div class="thumbnail"><img src="https://drive.google.com/thumbnail?id=${doc.id}"></div><div class="doc-title">${doc.title}</div><button class="menu-btn">⋮</button><div class="menu-box"><button onclick="event.stopPropagation();requestView('${doc.id}')">👁 View</button><button onclick="event.stopPropagation();shareDoc('${doc.id}')">🔗 Share</button></div>`;
-  b.addEventListener("click", (e) => { if(!e.target.closest(".menu-btn")) requestView(doc.id); });
-  b.querySelector(".menu-btn").onclick = e => { e.stopPropagation(); closeMenus(); b.querySelector(".menu-box").classList.toggle("active"); };
+  const b = document.createElement("div"); 
+  b.className = "doc-banner";
+  b.innerHTML = `
+    <div class="thumbnail"><img src="https://drive.google.com/thumbnail?id=${doc.id}" alt="thumbnail"></div>
+    <div class="doc-title">${doc.title}</div>
+    <button class="menu-btn"><i class="fas fa-ellipsis-v"></i></button>
+    <div class="menu-box">
+      <button onclick="event.stopPropagation();viewDoc('${doc.id}')"><i class="fas fa-eye"></i> View</button>
+      <button onclick="event.stopPropagation();shareDoc('${doc.id}')"><i class="fas fa-share-alt"></i> Share</button>
+    </div>
+  `;
+  // Click on card (excluding menu) opens the professional viewer
+  b.addEventListener("click", (e) => { 
+    if(!e.target.closest(".menu-btn")) viewDoc(doc.id); 
+  });
+  b.querySelector(".menu-btn").onclick = e => { 
+    e.stopPropagation(); 
+    closeMenus(); 
+    b.querySelector(".menu-box").classList.toggle("active"); 
+  };
   return b;
 }
-function closeMenus(){ document.querySelectorAll(".menu-box").forEach(m=>m.classList.remove("active")); }
-document.addEventListener("click",closeMenus);
 
-// ---------- VIEWER LOGIC ----------
-function requestView(id){ openDoc(id); }
-function openDoc(id){
-  document.getElementById("viewer").classList.add("active");
-  document.getElementById("viewerFrame").src=`https://drive.google.com/file/d/${id}/preview`;
+function closeMenus(){ 
+  document.querySelectorAll(".menu-box").forEach(m => m.classList.remove("active")); 
 }
-function closeViewer(){
-  document.getElementById("viewer").classList.remove("active");
-  document.getElementById("viewerFrame").src="";
+document.addEventListener("click", closeMenus);
+
+// ---------- MODAL: SHOWS ALL DOCUMENTS (INCLUDING THE "OMITTED" ONES) ----------
+function openModal(title, docs){
+  document.getElementById("modalTitle").textContent = title;
+  const box = document.getElementById("modalDocs");
+  box.innerHTML = "";
+  // Display EVERY document in this subject inside the modal
+  docs.forEach(d => box.appendChild(createDocCard(d)));
+  document.getElementById("moreModal").style.display = "flex";
+}
+function closeModal(){ 
+  document.getElementById("moreModal").style.display = "none"; 
 }
 
-// ---------- AUTO-OPEN ON PAGE LOAD (if ?doc=ID in URL) ----------
-function checkDocumentOnLoad(){
-  const params = new URLSearchParams(window.location.search);
-  const docId = params.get("doc");
-  if(docId){
-    // Small delay to ensure the page and viewer are ready
-    setTimeout(() => { openDoc(docId); }, 300);
+// ---------- NAVIGATE TO PROFESSIONAL VIEWER ----------
+function viewDoc(id){
+  window.location.href = `viewer.html?doc=${id}`;
+}
+
+// ---------- SHARE (copies viewer link) ----------
+function shareDoc(id){
+  const link = `${window.location.origin}${window.location.pathname.replace(/[^/]*$/, '')}viewer.html?doc=${id}`;
+  if(navigator.share){
+    navigator.share({title:"Zed Tuition Document", url:link});
+  } else {
+    navigator.clipboard.writeText(link).then(() => alert("Link copied to clipboard!"));
   }
 }
-window.addEventListener("load", checkDocumentOnLoad);
 
-// ---------- SHARE LOGIC (Creates link with ?doc=ID) ----------
-function shareDoc(id){
-  // Build the full link to this page with the doc parameter
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareableLink = baseUrl + "?doc=" + id;
-  const opts = document.getElementById("shareOptions");
-  opts.innerHTML = `
-    <button onclick="window.open('https://wa.me/?text=${encodeURIComponent(shareableLink)}')">📱 WhatsApp</button>
-    <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableLink)}')">📘 Facebook</button>
-    <button onclick="navigator.clipboard.writeText('${shareableLink}')">🔗 Copy Link</button>
-  `;
-  document.getElementById("shareModal").style.display="flex";
-}
-function closeShare(){ document.getElementById("shareModal").style.display="none"; }
-
-// ---------- "SHOW MORE" MODAL ----------
-function openModal(title,docs){
-  document.getElementById("modalTitle").textContent=title;
-  const box=document.getElementById("modalDocs");
-  box.innerHTML="";
-  docs.forEach(d=>box.appendChild(createDocCard(d)));
-  document.getElementById("moreModal").style.display="flex";
-}
-function closeModal(){ document.getElementById("moreModal").style.display="none"; }
-
-// Build the list on load
+// Build the list when page loads
 buildDocList();
 </script>
 </body>
