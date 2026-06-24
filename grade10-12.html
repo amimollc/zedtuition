@@ -1,10 +1,9 @@
-<!-- grade10-12.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 10-12 | Zed Tuition - Documents & Videos</title>
+<title>Grade 10-12 | Zed Tuition - Documents</title>
 <style>
   :root{
     --bg:#0f0f0f;
@@ -31,10 +30,10 @@
     display:flex; align-items:center; margin-bottom:10px; position:relative; cursor:pointer;
   }
   .doc-banner:hover{ background:var(--hover); }
-  .thumbnail{ width:60px; height:80px; margin-right:15px; background:#222; border-radius:4px; overflow:hidden; }
+  .thumbnail{ width:60px; height:80px; margin-right:15px; background:#222; border-radius:4px; overflow:hidden; flex-shrink:0; }
   .thumbnail img{ width:100%; height:100%; object-fit:cover; }
   .doc-title{ flex:1; }
-  .menu-btn{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; }
+  .menu-btn{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; padding:0 10px; }
   .menu-box{ position:absolute; right:10px; top:45px; background:#1b1b1b; border:1px solid #333; border-radius:8px; width:200px; display:none; z-index:20; }
   .menu-box.active{ display:block; }
   .menu-box button{ width:100%; background:none; border:none; color:#fff; padding:10px; text-align:left; cursor:pointer; }
@@ -42,33 +41,44 @@
   #viewer{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:10000; align-items:center; justify-content:center; }
   #viewer.active{ display:flex; }
   #viewer iframe{ width:90%; height:90%; border:none; border-radius:8px; }
-  #closeViewer{ position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:#fff; z-index:10001; }
+  #closeViewer{ position:absolute; top:10px; right:15px; font-size:28px; cursor:pointer; color:#fff; z-index:10001; background:rgba(0,0,0,0.5); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   .show-more{ padding:10px; text-align:center; background:var(--accent); border-radius:6px; cursor:pointer; margin-bottom:15px; color:#fff; font-weight:500; }
   .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:9999; }
   .popup{ background:#121212; padding:20px; border-radius:10px; max-width:850px; width:90%; max-height:80vh; overflow:auto; }
-  .btn-close{ background:#444; color:#fff; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; }
-  .video-section{ margin-top: 50px; }
-  .video-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-top:20px; }
-  .video-card{ background:var(--card); border-radius:12px; overflow:hidden; cursor:pointer; transition:0.2s; border:1px solid #2a2a2a; }
-  .video-card:hover{ transform:scale(1.02); background:var(--hover); }
-  .video-thumb{ width:100%; aspect-ratio:16/9; background:#000; }
-  .video-thumb img{ width:100%; height:100%; object-fit:cover; }
-  .video-card h4{ padding:12px; font-size:1rem; margin:0; }
-  .loading{ text-align:center; padding:30px; color:#aaa; }
-  iframe.video-frame{ width:100%; height:100%; border:none; }
+  .btn-close{ background:#444; color:#fff; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; margin-top:10px; }
+  #shareOptions button{ background:#333; color:#fff; border:none; padding:10px 15px; border-radius:6px; margin:5px; cursor:pointer; }
+  #shareOptions button:hover{ background:#555; }
 </style>
 </head>
 <body>
-<div class="nav-home"><a href="index.html">🏠 Back to Home</a></div>
-<h1>📘 Grade 10-12 Documents & Videos</h1>
-<div id="viewer"><div id="closeViewer" onclick="closeViewer()">✕</div><iframe id="viewerFrame"></iframe></div>
-<div id="docList"></div>
-<div id="moreModal" class="overlay"><div class="popup"><h2 id="modalTitle"></h2><div id="modalDocs"></div><button class="btn-close" onclick="closeModal()">Close</button></div></div>
-<div id="shareModal" class="overlay"><div class="popup"><h3>Share Document</h3><div id="shareOptions"></div><button class="btn-close" onclick="closeShare()">Close</button></div></div>
+<div class="nav-home"><a href="../index.html">🏠 Back to Home</a></div>
+<h1>📘 Grade 10-12 Documents</h1>
 
-<div class="video-section" id="videos-section">
-  <h2 class="subject-title">🎥 Video Lessons (Grade 10-12)</h2>
-  <div id="videoContainer" class="video-grid"><div class="loading">Loading videos from extralearnsearch...</div></div>
+<!-- Viewer Overlay -->
+<div id="viewer">
+  <div id="closeViewer" onclick="closeViewer()">✕</div>
+  <iframe id="viewerFrame" src=""></iframe>
+</div>
+
+<!-- Document List -->
+<div id="docList"></div>
+
+<!-- "Show More" Modal -->
+<div id="moreModal" class="overlay">
+  <div class="popup">
+    <h2 id="modalTitle"></h2>
+    <div id="modalDocs"></div>
+    <button class="btn-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- Share Modal -->
+<div id="shareModal" class="overlay">
+  <div class="popup">
+    <h3>Share Document</h3>
+    <div id="shareOptions"></div>
+    <button class="btn-close" onclick="closeShare()">Close</button>
+  </div>
 </div>
 
 <script>
@@ -116,6 +126,7 @@ const subjects = {
  "Religious Education":[ {title:"RE notes",id:"1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11"} ]
 };
 
+// ---------- BUILD DOCUMENT LIST ----------
 const listDiv = document.getElementById("docList");
 function buildDocList(){
   Object.keys(subjects).forEach(sub=>{
@@ -141,84 +152,56 @@ function createDocCard(doc){
 }
 function closeMenus(){ document.querySelectorAll(".menu-box").forEach(m=>m.classList.remove("active")); }
 document.addEventListener("click",closeMenus);
+
+// ---------- VIEWER LOGIC ----------
 function requestView(id){ openDoc(id); }
-function openDoc(id){ document.getElementById("viewer").classList.add("active"); document.getElementById("viewerFrame").src=`https://drive.google.com/file/d/${id}/preview`; }
-function closeViewer(){ document.getElementById("viewer").classList.remove("active"); document.getElementById("viewerFrame").src=""; }
+function openDoc(id){
+  document.getElementById("viewer").classList.add("active");
+  document.getElementById("viewerFrame").src=`https://drive.google.com/file/d/${id}/preview`;
+}
+function closeViewer(){
+  document.getElementById("viewer").classList.remove("active");
+  document.getElementById("viewerFrame").src="";
+}
+
+// ---------- AUTO-OPEN ON PAGE LOAD (if ?doc=ID in URL) ----------
+function checkDocumentOnLoad(){
+  const params = new URLSearchParams(window.location.search);
+  const docId = params.get("doc");
+  if(docId){
+    // Small delay to ensure the page and viewer are ready
+    setTimeout(() => { openDoc(docId); }, 300);
+  }
+}
+window.addEventListener("load", checkDocumentOnLoad);
+
+// ---------- SHARE LOGIC (Creates link with ?doc=ID) ----------
 function shareDoc(id){
-  const link = `${location.origin}${location.pathname}?doc=${id}`;
+  // Build the full link to this page with the doc parameter
+  const baseUrl = window.location.origin + window.location.pathname;
+  const shareableLink = baseUrl + "?doc=" + id;
   const opts = document.getElementById("shareOptions");
-  opts.innerHTML = `<button onclick="window.open('https://wa.me/?text=${encodeURIComponent(link)}')">📱 WhatsApp</button><button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}')">📘 Facebook</button><button onclick="navigator.clipboard.writeText('${link}')">🔗 Copy Link</button>`;
+  opts.innerHTML = `
+    <button onclick="window.open('https://wa.me/?text=${encodeURIComponent(shareableLink)}')">📱 WhatsApp</button>
+    <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableLink)}')">📘 Facebook</button>
+    <button onclick="navigator.clipboard.writeText('${shareableLink}')">🔗 Copy Link</button>
+  `;
   document.getElementById("shareModal").style.display="flex";
 }
 function closeShare(){ document.getElementById("shareModal").style.display="none"; }
-function openModal(title,docs){ document.getElementById("modalTitle").textContent=title; const box=document.getElementById("modalDocs"); box.innerHTML=""; docs.forEach(d=>box.appendChild(createDocCard(d))); document.getElementById("moreModal").style.display="flex"; }
-function closeModal(){ document.getElementById("moreModal").style.display="none"; }
-buildDocList();
 
-// ---------- VIDEO EXTRACTION (Grade 10-12) ----------
-async function fetchVideosForLevel(levelKeywords, fallbackVideos){
-  const videoContainer = document.getElementById("videoContainer");
-  videoContainer.innerHTML = '<div class="loading">🔍 Fetching lessons from extralearnsearch...</div>';
-  try {
-    const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://amimollc.github.io/extralearnsearch");
-    const response = await fetch(proxyUrl);
-    if(!response.ok) throw new Error("Network error");
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const links = doc.querySelectorAll("a");
-    const videos = [];
-    links.forEach(link => {
-      let href = link.href;
-      if(href.includes("youtube.com/watch") || href.includes("youtu.be/")){
-        let title = link.textContent.trim() || link.innerText || "Video lesson";
-        let fullText = (link.parentElement?.innerText || title + " " + link.href).toLowerCase();
-        let matched = levelKeywords.some(kw => fullText.includes(kw));
-        if(matched || title.toLowerCase().includes("grade 10") || title.toLowerCase().includes("grade 11") || title.toLowerCase().includes("grade 12")){
-          let videoId = "";
-          if(href.includes("youtu.be/")) videoId = href.split("youtu.be/")[1]?.split(/[?#]/)[0];
-          else if(href.includes("watch?v=")) videoId = href.split("v=")[1]?.split("&")[0];
-          if(videoId && !videos.some(v=>v.id===videoId)) videos.push({ title: title.substring(0,70), id: videoId, url: `https://www.youtube.com/embed/${videoId}` });
-        }
-      }
-    });
-    if(videos.length === 0) throw new Error("No videos matched");
-    displayVideos(videos.slice(0,12));
-  } catch(err){
-    console.warn("Extraction error, using fallback data:", err);
-    displayVideos(fallbackVideos);
-  }
+// ---------- "SHOW MORE" MODAL ----------
+function openModal(title,docs){
+  document.getElementById("modalTitle").textContent=title;
+  const box=document.getElementById("modalDocs");
+  box.innerHTML="";
+  docs.forEach(d=>box.appendChild(createDocCard(d)));
+  document.getElementById("moreModal").style.display="flex";
 }
-function displayVideos(videos){
-  const container = document.getElementById("videoContainer");
-  if(!videos.length){ container.innerHTML = '<div class="loading">⚠️ No videos found for this level.</div>'; return; }
-  container.innerHTML = "";
-  videos.forEach(v => {
-    const card = document.createElement("div");
-    card.className = "video-card";
-    card.innerHTML = `<div class="video-thumb"><img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="thumbnail" loading="lazy"></div><h4>${v.title}</h4>`;
-    card.onclick = () => { openVideoModal(v.url); };
-    container.appendChild(card);
-  });
-}
-function openVideoModal(videoSrc){
-  const existing = document.getElementById("videoModal");
-  if(existing) existing.remove();
-  const modal = document.createElement("div");
-  modal.id = "videoModal";
-  modal.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:20000; display:flex; align-items:center; justify-content:center; flex-direction:column;";
-  modal.innerHTML = `<div style="background:#000; width:90%; max-width:900px;"><iframe width="100%" height="450" src="${videoSrc}?autoplay=1" frameborder="0" allowfullscreen></iframe><button style="margin-top:15px; background:#7c5cff; border:none; padding:8px 20px; border-radius:30px; color:white; cursor:pointer;" onclick="this.closest('#videoModal').remove()">Close</button></div>`;
-  document.body.appendChild(modal);
-}
-const fallbackSenior = [
-  { title: "ECZ Grade 12 Mathematics Revision", id: "dQw4w9WgXcQ", url: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-  { title: "Physics - Work, Energy & Power (Grade 10-12)", id: "mGqUYcXqMjU", url: "https://www.youtube.com/embed/mGqUYcXqMjU" },
-  { title: "English Grammar for ECZ", id: "n_sC8mRWmb0", url: "https://www.youtube.com/embed/n_sC8mRWmb0" },
-  { title: "Biology: Human Transport System", id: "HGz7x5QE4v8", url: "https://www.youtube.com/embed/HGz7x5QE4v8" },
-  { title: "Chemistry - Chemical Bonding", id: "QqjcCvzWwww", url: "https://www.youtube.com/embed/QqjcCvzWwww" },
-  { title: "Civic Education - Constitution", id: "XH9ZoK8q5Ik", url: "https://www.youtube.com/embed/XH9ZoK8q5Ik" }
-];
-fetchVideosForLevel(["grade 10","grade 11","grade 12","senior secondary","ecz grade","10-12"], fallbackSenior);
+function closeModal(){ document.getElementById("moreModal").style.display="none"; }
+
+// Build the list on load
+buildDocList();
 </script>
 </body>
-  </html>
+</html>
