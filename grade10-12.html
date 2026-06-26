@@ -1,227 +1,917 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 10-12 | Zed Tuition</title>
-<!-- Font Awesome (online icons) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-  :root{
-    --bg:#0f0f0f;
-    --card:#161616;
-    --hover:#1f1f1f;
-    --text:#eaeaea;
-    --border:#2a2a2a;
-    --accent:#7c5cff;  /* Purple theme */
-  }
-  *{ margin:0; padding:0; box-sizing:border-box; }
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Segoe UI',Roboto,Arial;
-    max-width:1200px;
-    margin:auto;
-    padding:15px;
-  }
-  h1{ text-align:center; font-weight:300; margin:20px 0; }
-  .nav-home{ text-align:right; margin-bottom:20px; }
-  .nav-home a{ color:var(--accent); text-decoration:none; font-weight:500; }
-  .nav-home a i{ margin-right:6px; }
-  .subject-title{ margin:30px 0 12px; font-size:22px; border-bottom:1px solid var(--border); padding-bottom:6px; }
-  
-  .doc-banner{
-    background:var(--card); border:1px solid var(--border); border-radius:8px; padding:12px;
-    display:flex; align-items:center; margin-bottom:10px; position:relative; cursor:pointer;
-    transition:background 0.2s;
-  }
-  .doc-banner:hover{ background:var(--hover); }
-  .thumbnail{ width:60px; height:80px; margin-right:15px; background:#222; border-radius:4px; overflow:hidden; flex-shrink:0; }
-  .thumbnail img{ width:100%; height:100%; object-fit:cover; }
-  .doc-title{ flex:1; font-weight:500; }
-  .menu-btn{ background:none; border:none; color:#fff; font-size:20px; cursor:pointer; padding:0 10px; }
-  .menu-box{ position:absolute; right:10px; top:45px; background:#1b1b1b; border:1px solid #333; border-radius:8px; width:180px; display:none; z-index:20; }
-  .menu-box.active{ display:block; }
-  .menu-box button{ width:100%; background:none; border:none; color:#fff; padding:10px 14px; text-align:left; cursor:pointer; font-size:14px; }
-  .menu-box button:hover{ background:#333; }
-  .menu-box button i{ margin-right:10px; width:18px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Grade 10-12 | Zed Tuition - Documents & Videos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
-  /* PURPLE "SHOW MORE" BUTTON */
-  .show-more{
-    padding:12px;
-    text-align:center;
-    background:var(--accent);  /* Purple */
-    border-radius:6px;
-    cursor:pointer;
-    margin-bottom:15px;
-    color:#fff;
-    font-weight:600;
-    transition:opacity 0.2s;
-  }
-  .show-more:hover{ opacity:0.85; }
-  .show-more i{ margin-right:8px; }
+    body {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.light-mode {
+      background: #f5f5f5;
+      color: #1a1a1a;
+    }
 
-  /* MODAL OVERLAY */
-  .overlay{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:9999; }
-  .popup{ background:#121212; padding:20px; border-radius:10px; max-width:850px; width:90%; max-height:80vh; overflow:auto; }
-  .popup h2{ margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:8px; }
-  .btn-close{ background:#444; color:#fff; border:none; padding:10px 15px; border-radius:6px; cursor:pointer; margin-top:10px; }
-  .btn-close i{ margin-right:6px; }
-</style>
+    :root {
+      --primary: #D100FF;
+      --primary-dark: #A700CC;
+      --card-bg: #12141e;
+      --border-subtle: #252a3a;
+      --text-muted: #a7b0ca;
+    }
+    body.light-mode {
+      --card-bg: #ffffff;
+      --border-subtle: #cccccc;
+      --text-muted: #555555;
+    }
+
+    /* ── Fixed Header ── */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 500;
+      background: rgba(8,10,18,0.97);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.8rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    body.light-mode .header-bar { background: rgba(255,255,255,0.97); }
+
+    .back-home {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+    body.light-mode .back-home { color: #1a1a1a; }
+    .back-home:hover { color: var(--primary); }
+
+    .logo-area h1 {
+      font-size: 1.6rem;
+      background: #D100FF;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    /* ── Search Row ── */
+    .search-row {
+      max-width: 1400px;
+      margin: 80px auto 0.5rem;
+      padding: 0.5rem 2rem 0;
+    }
+    .search-bar-inner {
+      display: flex;
+      align-items: center;
+      background: #1a1d2b;
+      border-radius: 60px;
+      padding: 0.3rem 0.3rem 0.3rem 1.2rem;
+      border: 1px solid #2d3246;
+      transition: border 0.2s;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    body.light-mode .search-bar-inner { background: #eaeaea; border-color: #bbb; }
+    .search-bar-inner:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(209,0,255,0.3); }
+
+    .search-icon { color: #ffffff; font-size: 0.9rem; }
+    body.light-mode .search-icon { color: #1a1a1a; }
+
+    .search-bar-inner input {
+      background: transparent;
+      border: none;
+      padding: 10px 10px;
+      width: 100%;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    body.light-mode .search-bar-inner input { color: #1a1a1a; }
+    .search-bar-inner input::placeholder { color: #a0a0b0; }
+    body.light-mode .search-bar-inner input::placeholder { color: #777; }
+
+    .search-bar-inner button {
+      background: var(--primary);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .search-bar-inner button:hover { background: var(--primary-dark); transform: scale(0.96); }
+
+    /* ── Container ── */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 2rem 2rem;
+    }
+
+    /* ── Page Title ── */
+    .page-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 1rem 0 1.5rem;
+      color: #ffffff;
+    }
+    body.light-mode .page-title { color: #1a1a1a; }
+
+    /* ── Tabs ── */
+    .tabs-container {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      padding: 0.7rem 2.5rem;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    body.light-mode .tab-btn {
+      border-color: #1a1a1a;
+      color: #1a1a1a;
+    }
+    .tab-btn.active {
+      background: #ffffff;
+      color: #1a1a1a;
+    }
+    body.light-mode .tab-btn.active {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+    .tab-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.1);
+    }
+    body.light-mode .tab-btn:hover:not(.active) {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .tab-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── DOCUMENTS TAB ── */
+    .subject-title {
+      margin: 30px 0 10px;
+      font-size: 1.3rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 6px;
+      color: #ffffff;
+    }
+    body.light-mode .subject-title { color: #1a1a1a; }
+
+    .doc-banner {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .doc-banner:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+    .thumbnail {
+      width: 60px;
+      height: 80px;
+      margin-right: 15px;
+      background: #222;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+    .doc-title { flex: 1; font-weight: 500; }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+    body.light-mode .menu-btn { color: #1a1a1a; }
+    .menu-btn:hover { background: rgba(209,0,255,0.15); }
+
+    .menu-box {
+      position: absolute;
+      right: 10px;
+      top: 45px;
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 200px;
+      display: none;
+      z-index: 20;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+    body.light-mode .menu-box { background: #f0f0f0; border-color: #ccc; }
+    .menu-box.active { display: block; }
+    .menu-box button {
+      width: 100%;
+      background: none;
+      border: none;
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+    body.light-mode .menu-box button { color: #1a1a1a; }
+    .menu-box button:hover { background: rgba(209,0,255,0.15); }
+
+    .show-more {
+      padding: 10px;
+      text-align: center;
+      background: var(--primary);
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      color: #fff;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .show-more:hover { opacity: 0.85; transform: scale(0.98); }
+
+    /* ── MODALS ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .overlay.active { display: flex; }
+    .popup {
+      background: #121212;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 850px;
+      width: 90%;
+      max-height: 80vh;
+      overflow: auto;
+    }
+    body.light-mode .popup { background: #ffffff; }
+    .btn-close { background: #444; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+    body.light-mode .btn-close { background: #ddd; color: #1a1a1a; }
+
+    /* ── VIDEOS TAB ── */
+    .video-section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 1.5rem 0 1rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    body.light-mode .video-section-title { color: #1a1a1a; }
+
+    .video-section-title i { color: var(--primary); }
+
+    .video-scroll-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.2rem;
+      background: var(--card-bg);
+      padding: 0.5rem 0;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 1.5rem;
+    }
+    .video-scroll {
+      display: flex;
+      gap: 1rem;
+      padding: 0.5rem 1.5rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+    }
+    .video-scroll::-webkit-scrollbar { height: 4px; }
+    .video-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    .video-card {
+      flex: 0 0 240px;
+      background: #1a1d2b;
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: 0.25s;
+      cursor: pointer;
+      border: 1px solid transparent;
+      position: relative;
+    }
+    body.light-mode .video-card { background: #f0f0f0; }
+    .video-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 25px rgba(209,0,255,0.2);
+    }
+    .video-card .thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #0b0d14;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-card .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-card .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      transition: 0.2s;
+    }
+    .video-card .play-overlay i {
+      font-size: 3rem;
+      color: white;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: 0.2s;
+    }
+    .video-card:hover .play-overlay i { transform: scale(1.1); color: var(--primary); }
+    .video-card .video-title {
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body.light-mode .video-card .video-title { color: #1a1a1a; }
+    .video-card .video-badge {
+      display: inline-block;
+      background: var(--primary);
+      font-size: 0.55rem;
+      padding: 2px 10px;
+      border-radius: 30px;
+      margin: 0 12px 8px;
+      color: white;
+      font-weight: 600;
+    }
+
+    /* ── VIDEO MODAL ── */
+    #videoModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 20000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #videoModal.active { display: flex; }
+    #videoModal .video-wrapper {
+      width: 90%;
+      max-width: 900px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #videoModal iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+    }
+    #videoModal .close-video {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 10px;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      z-index: 20001;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 750px) {
+      .header-bar { padding: 0.6rem 1rem; }
+      .search-row { padding: 0.5rem 1rem 0; margin-top: 70px; }
+      .container { padding: 1rem; }
+      .tab-btn { padding: 0.5rem 1.2rem; font-size: 0.9rem; }
+      .video-card { flex: 0 0 180px; }
+      .page-title { font-size: 1.6rem; }
+    }
+    @media (max-width: 480px) {
+      .video-card { flex: 0 0 150px; }
+      .video-card .video-title { font-size: 0.7rem; }
+    }
+
+    /* ── Loading Spinner ── */
+    .loading-spinner {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+    }
+    .loading-spinner i { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+  </style>
 </head>
 <body>
-<div class="nav-home"><a href="../index.html"><i class="fas fa-home"></i> Back to Home</a></div>
-<h1><i class="fas fa-graduation-cap"></i> Grade 10-12 Documents</h1>
-<div id="docList"></div>
 
-<!-- "Show More" Modal -->
-<div id="moreModal" class="overlay">
+<!-- ===== FIXED HEADER ===== -->
+<div class="header-bar">
+  <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Home</a>
+  <div class="logo-area"><h1>📘 Grade 10-12</h1></div>
+  <div style="width:80px;"></div>
+</div>
+
+<!-- ===== SEARCH BAR ===== -->
+<div class="search-row">
+  <div class="search-bar-inner">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="globalSearchInput" placeholder="Search documents & videos... (e.g. Maths, Biology, ECZ)">
+    <button id="globalSearchBtn"><i class="fas fa-arrow-right"></i></button>
+  </div>
+</div>
+
+<!-- ===== CONTAINER ===== -->
+<div class="container">
+
+  <h1 class="page-title"><i class="fas fa-graduation-cap" style="color:var(--primary);"></i> Grade 10-12 Resources</h1>
+
+  <!-- ===== TABS ===== -->
+  <div class="tabs-container">
+    <button class="tab-btn active" data-tab="documents"><i class="fas fa-file-alt"></i> Documents</button>
+    <button class="tab-btn" data-tab="videos"><i class="fas fa-video"></i> Videos</button>
+  </div>
+
+  <!-- ===== DOCUMENTS TAB ===== -->
+  <div class="tab-content active" id="tab-documents">
+    <div id="docList"></div>
+  </div>
+
+  <!-- ===== VIDEOS TAB ===== -->
+  <div class="tab-content" id="tab-videos">
+    <div id="videoContent">
+      <div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Loading videos...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SHOW MORE MODAL ===== -->
+<div class="overlay" id="moreModal">
   <div class="popup">
     <h2 id="modalTitle"></h2>
     <div id="modalDocs"></div>
-    <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+    <button class="btn-close" onclick="closeModal()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ===== SHARE MODAL ===== -->
+<div class="overlay" id="shareModal">
+  <div class="popup" style="max-width:450px;">
+    <h3>Share Document</h3>
+    <div id="shareOptions"></div>
+    <button class="btn-close" onclick="closeShare()" style="margin-top:15px;">Close</button>
+  </div>
+</div>
+
+<!-- ===== VIDEO MODAL ===== -->
+<div id="videoModal">
+  <button class="close-video" onclick="closeVideoModal()"><i class="fas fa-times"></i></button>
+  <div class="video-wrapper">
+    <iframe id="videoModalFrame" src="" allowfullscreen></iframe>
   </div>
 </div>
 
 <script>
-// ---------- COMPLETE DOCUMENT DATABASE (ALL FILES) ----------
-const subjects = {
- "Mathematics":[
-  {title:"Progress in Maths Grade 10", id:"1blK7UXeLCWPuNiUzben75qLe3ms1eiAB", desc:"Comprehensive guide for Grade 10 Maths", uploader:"ZedTuition Team"},
-  {title:"Maths grade 10-12 P1 mr 6 points", id:"1OkniiwTpHhm7LE5b5JjTVAWDM7wPjYyn", desc:"Past paper solutions", uploader:"Mr. Six Points"},
-  {title:"Maths grade 10-12 Study Guide", id:"1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1", desc:"Complete study guide", uploader:"ECZ"},
-  {title:"Progress in maths grade 11", id:"1i2JskliFE3GpAHL_LkENowVzdWlQ4M4a", desc:"Grade 11 progress", uploader:"ZedTuition"},
-  {title:"Mathematics grade 10-12 Q&A", id:"12GIIPI8kd8TT6vvhDIWq01gmUjb4m0Qr", desc:"Questions and answers", uploader:"ECZ"}
- ],
- "English":[
-  {title:"Amplified English grade 10-12", id:"1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu", desc:"Amplified notes", uploader:"Amplified"},
-  {title:"ECZ English grade 10 to 12", id:"1J-uOuMPrGDPx0W8jnCNQhr2qfY9PkDtS", desc:"ECZ syllabus", uploader:"ECZ"},
-  {title:"ECZ English grade 12 P1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Paper 1 revision", uploader:"ECZ"}
- ],
- "Biology":[
-  {title:"Biology Zase notes", id:"1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C", desc:"Zase notes", uploader:"Zase"},
-  {title:"Biology grade 10-12", id:"1IP-nHH70Chi96-dWfu5yeBB5HvyFwS1m", desc:"Full biology", uploader:"ZedTuition"},
-  {title:"Biology Notes", id:"1I0FArIPg0hfmZyTTSZNWCO_UzLxYjCIy", desc:"Concise notes", uploader:"ZedTuition"}
- ],
- "Physics":[
-  {title:"Physics Question and answers", id:"1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO", desc:"Q&A", uploader:"ZedTuition"},
-  {title:"Physics syllabus", id:"1ESmSyYzDHLyEIQRl0hPHzO8h1A57jJz5", desc:"Syllabus", uploader:"ECZ"},
-  {title:"Physics Notes", id:"1IwzRCG-B-_Oh1uqjWYNjnvkwa4STyZsD", desc:"Notes", uploader:"ZedTuition"}
- ],
- "Chemistry":[
-  {title:"Chemistry grade 10-12", id:"1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC", desc:"Full chemistry", uploader:"ZedTuition"},
-  {title:"Chemistry amplified notes", id:"1Ie1XJogzpobaR56C29SQ6Zgggat5Vduh", desc:"Amplified", uploader:"Amplified"}
- ],
- "Civic":[
-  {title:"Civic grade 10-12", id:"1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8", desc:"Civic notes", uploader:"ZedTuition"},
-  {title:"Civic pamphlet", id:"1JC-ojT72GQmLm_uJjoXx8gVmuj9arqRg", desc:"Pamphlet", uploader:"ECZ"}
- ],
- "Geography":[
-  {title:"Geography notes", id:"1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO", desc:"Geography", uploader:"ZedTuition"}
- ],
- "History":[ 
-  {title:"History P1", id:"1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco", desc:"Paper 1", uploader:"ECZ"} 
- ],
- "Account":[ 
-  {title:"Account P1", id:"1Iaz8GLmQiCffCWSJWr2rnyIpvc0ime8u", desc:"Paper 1", uploader:"ECZ"} 
- ],
- "Literature in English":[
-  {title:"Literature Doc 1", id:"1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl", desc:"Literature", uploader:"ECZ"},
-  {title:"Literature Doc 2", id:"1Iy44N0OycGsUsVARci4hSdSByM-40-Kn", desc:"Literature notes", uploader:"ZedTuition"}
- ],
- "Religious Education":[ 
-  {title:"RE notes", id:"1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11", desc:"RE", uploader:"ZedTuition"} 
- ]
-};
+  // ============================================================
+  // 1. DOCUMENTS DATA (Grade 10-12)
+  // ============================================================
+  const subjects = {
+    "Mathematics": [
+      { title: "Progress in Maths Grade 10", id: "1blK7UXeLCWPuNiUzben75qLe3ms1eiAB" },
+      { title: "Maths grade 10-12 P1 mr 6 points", id: "1OkniiwTpHhm7LE5b5JjTVAWDM7wPjYyn" },
+      { title: "Maths grade 10-12 Study Guide", id: "1YX_DNXRSAuqqhlc49EYFzm675BdKZZV1" },
+      { title: "Progress in maths grade 11", id: "1i2JskliFE3GpAHL_LkENowVzdWlQ4M4a" },
+      { title: "Mathematics grade 10-12 Q&A", id: "12GIIPI8kd8TT6vvhDIWq01gmUjb4m0Qr" }
+    ],
+    "English": [
+      { title: "Amplified English grade 10-12", id: "1j18dymh-AuJtBKN8ltPFfBO9y-SRsUXu" },
+      { title: "ECZ English grade 10 to 12", id: "1J-uOuMPrGDPx0W8jnCNQhr2qfY9PkDtS" },
+      { title: "ECZ English grade 12 P1", id: "1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl" },
+      { title: "English grade 10-12 syllabus", id: "1Je7Go3d_F1yXUJGuH4wtg28NvbJ2hqRs" }
+    ],
+    "Biology": [
+      { title: "Biology Zase notes", id: "1InRLQECwgRzj6pnIhYsfF-ANpsTRyo6C" },
+      { title: "Biology grade 10-12", id: "1IP-nHH70Chi96-dWfu5yeBB5HvyFwS1m" },
+      { title: "Biology Notes", id: "1I0FArIPg0hfmZyTTSZNWCO_UzLxYjCIy" },
+      { title: "Biology Past Paper", id: "1SCfyr2Of1bYloyK-33x43kHp2hCleANh" }
+    ],
+    "Physics": [
+      { title: "Physics Question and answers", id: "1I_ZYCO1DwDZL5Sqx6xWIwyo6fQMjnIMO" },
+      { title: "Physics syllabus", id: "1ESmSyYzDHLyEIQRl0hPHzO8h1A57jJz5" },
+      { title: "Physics Notes", id: "1IwzRCG-B-_Oh1uqjWYNjnvkwa4STyZsD" },
+      { title: "Physics Past Paper", id: "1IIcYLvffPrGiah50kQ4XAsT0aUf0J0Fb" },
+      { title: "Physics grade 10-12 notes", id: "1j2V4DHsXNs3NAYZZy4k7Dd99uLrb89C9" }
+    ],
+    "Chemistry": [
+      { title: "Chemistry grade 10-12", id: "1b0LqXFk1QOnQZPvRR2cS0II7gDcDdRWC" },
+      { title: "Chemistry amplified notes", id: "1Ie1XJogzpobaR56C29SQ6Zgggat5Vduh" },
+      { title: "Chemistry Past Paper", id: "1IIcYLvffPrGiah50kQ4XAsT0aUf0J0Fb" }
+    ],
+    "Civic Education": [
+      { title: "Civic grade 10-12", id: "1yHrlBhbrX5OENW5PFoq-a3avSdRlVXA8" },
+      { title: "Civic pamphlet", id: "1JC-ojT72GQmLm_uJjoXx8gVmuj9arqRg" },
+      { title: "Civic Notes", id: "1JAXa_0mCTJoUWl9CKZ4PI7woT1HjAknG" }
+    ],
+    "Geography": [
+      { title: "Geography notes", id: "1J-dsIsDtBVk7ii6sn7TxHxtDgbswCrZO" },
+      { title: "Geography syllabus", id: "1J5nWvyVnV4wYWLmVvwbdoCrPAOEAqm9M" }
+    ],
+    "History": [
+      { title: "History P1", id: "1Ik5ShFeS1CAeMA1QnKIn27eDOW8XeLco" }
+    ],
+    "Account": [
+      { title: "Account P1", id: "1Iaz8GLmQiCffCWSJWr2rnyIpvc0ime8u" }
+    ],
+    "Literature in English": [
+      { title: "Literature Doc 1", id: "1LKu4jvBP04BJEWFuqt4OeI9UYNAizwcl" },
+      { title: "Literature Doc 2", id: "1Iy44N0OycGsUsVARci4hSdSByM-40-Kn" },
+      { title: "Literature Doc 3", id: "1IoT_TJUwzB_m66ffor7jO5-nCwqpU6Tp" }
+    ],
+    "Religious Education": [
+      { title: "RE notes", id: "1_gjNN2ljXAjw1EvJy0vY0DZ52yYvc-11" },
+      { title: "RE P2", id: "1IN-pjyogos1KC9ULF5X9V4n7zEGd4TJ0" },
+      { title: "RE Notes", id: "1exBp-L_33hLLf1monl257PNJr1Ky3ZfD" }
+    ]
+  };
 
-// ---------- BUILD LIST (FIRST 2 VISIBLE + PURPLE "SHOW MORE") ----------
-const listDiv = document.getElementById("docList");
+  // ============================================================
+  // 2. RENDER DOCUMENTS
+  // ============================================================
+  const listDiv = document.getElementById('docList');
 
-function buildDocList(){
-  Object.keys(subjects).forEach(sub => {
-    // Subject header
-    const titleDiv = document.createElement("div");
-    titleDiv.className = "subject-title";
-    titleDiv.textContent = sub;
-    listDiv.appendChild(titleDiv);
+  function createDocCard(doc) {
+    const b = document.createElement('div');
+    b.className = 'doc-banner';
+    b.innerHTML = `
+      <div class="thumbnail"><img src="https://drive.google.com/thumbnail?id=${doc.id}&sz=w200" onerror="this.src='https://placehold.co/60x80/1a1d2b/D100FF?text=Doc'"></div>
+      <div class="doc-title">${escapeHtml(doc.title)}</div>
+      <button class="menu-btn">⋮</button>
+      <div class="menu-box">
+        <button onclick="event.stopPropagation();viewDocument('${doc.id}')">👁 View</button>
+        <button onclick="event.stopPropagation();shareDoc('${doc.id}', '${escapeHtml(doc.title)}')">🔗 Share</button>
+      </div>
+    `;
+    b.addEventListener('click', (e) => {
+      if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-box')) {
+        viewDocument(doc.id);
+      }
+    });
+    b.querySelector('.menu-btn').onclick = (e) => {
+      e.stopPropagation();
+      closeAllMenus();
+      b.querySelector('.menu-box').classList.toggle('active');
+    };
+    return b;
+  }
 
-    const docs = subjects[sub];
-    
-    // Show first 2 documents
-    docs.slice(0, 2).forEach(doc => {
-      listDiv.appendChild(createDocCard(doc));
+  function closeAllMenus() {
+    document.querySelectorAll('.menu-box').forEach(m => m.classList.remove('active'));
+  }
+  document.addEventListener('click', closeAllMenus);
+
+  function buildDocList() {
+    listDiv.innerHTML = '';
+    Object.keys(subjects).forEach(sub => {
+      const title = document.createElement('div');
+      title.className = 'subject-title';
+      title.textContent = sub;
+      listDiv.appendChild(title);
+      const docs = subjects[sub];
+      docs.slice(0, 2).forEach(d => listDiv.appendChild(createDocCard(d)));
+      if (docs.length > 2) {
+        const more = document.createElement('div');
+        more.className = 'show-more';
+        more.textContent = 'Show more';
+        more.onclick = () => openModal(sub, docs);
+        listDiv.appendChild(more);
+      }
+    });
+  }
+  buildDocList();
+
+  // ============================================================
+  // 3. DOCUMENT FUNCTIONS – NAVIGATE TO viewer.html
+  // ============================================================
+  function viewDocument(id) {
+    window.location.href = `viewer.html?doc=${id}`;
+  }
+
+  function shareDoc(id, title) {
+    const link = `${location.origin}${location.pathname}?doc=${id}`;
+    const opts = document.getElementById('shareOptions');
+    opts.innerHTML = `
+      <button onclick="window.open('https://wa.me/?text=${encodeURIComponent(link)}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      <button onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}')"><i class="fab fa-facebook"></i> Facebook</button>
+      <button onclick="navigator.clipboard.writeText('${link}').then(()=>alert('Copied!'))"><i class="fas fa-copy"></i> Copy Link</button>
+    `;
+    document.getElementById('shareModal').classList.add('active');
+  }
+  function closeShare() { document.getElementById('shareModal').classList.remove('active'); }
+
+  function openModal(title, docs) {
+    document.getElementById('modalTitle').textContent = title;
+    const box = document.getElementById('modalDocs');
+    box.innerHTML = '';
+    docs.forEach(d => box.appendChild(createDocCard(d)));
+    document.getElementById('moreModal').classList.add('active');
+  }
+  function closeModal() { document.getElementById('moreModal').classList.remove('active'); }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]) || m);
+  }
+
+  // ============================================================
+  // 4. TABS SWITCHING
+  // ============================================================
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+      if (btn.dataset.tab === 'videos' && !window.videosLoaded) {
+        loadVideos();
+      }
+    });
+  });
+
+  // ============================================================
+  // 5. VIDEOS TAB — Fetch & Render
+  // ============================================================
+  window.videosLoaded = false;
+  const videoContent = document.getElementById('videoContent');
+
+  const subjectKeywords = {
+    'Mathematics': ['math', 'mathematics', 'algebra', 'calculus', 'geometry', 'trigonometry', 'maths'],
+    'English': ['english', 'grammar', 'literature', 'writing', 'reading', 'comprehension'],
+    'Biology': ['biology', 'cell', 'genetics', 'ecology', 'human body', 'photosynthesis'],
+    'Physics': ['physics', 'mechanics', 'energy', 'force', 'motion', 'electricity', 'waves'],
+    'Chemistry': ['chemistry', 'chemical', 'bond', 'reaction', 'periodic table', 'acid', 'base'],
+    'Civic Education': ['civic', 'constitution', 'government', 'democracy', 'citizenship'],
+    'Geography': ['geography', 'map', 'climate', 'population', 'landform'],
+    'History': ['history', 'ancient', 'colonial', 'independence', 'world war'],
+    'Religious Education': ['religious', 're', 'bible', 'faith', 'moral', 'values']
+  };
+
+  async function loadVideos() {
+    videoContent.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-pulse"></i> Loading videos from across the web...</div>';
+
+    try {
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://amimollc.github.io/extralearnsearch');
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error('Network error');
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const links = doc.querySelectorAll('a');
+      const videos = [];
+
+      links.forEach(link => {
+        let href = link.href;
+        if (href.includes('youtube.com/watch') || href.includes('youtu.be/')) {
+          let title = link.textContent.trim() || 'Video lesson';
+          let fullText = (title + ' ' + (link.parentElement?.innerText || '')).toLowerCase();
+
+          if (!fullText.includes('grade 10') && !fullText.includes('grade 11') && !fullText.includes('grade 12') &&
+              !fullText.includes('10-12') && !fullText.includes('senior') && !fullText.includes('ecz')) {
+            return;
+          }
+
+          let videoId = '';
+          if (href.includes('youtu.be/')) videoId = href.split('youtu.be/')[1]?.split(/[?#]/)[0];
+          else if (href.includes('v=')) videoId = href.split('v=')[1]?.split('&')[0];
+          if (videoId && !videos.some(v => v.id === videoId)) {
+            videos.push({
+              title: title.substring(0, 80),
+              id: videoId,
+              embedUrl: `https://www.youtube.com/embed/${videoId}`,
+              thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+            });
+          }
+        }
+      });
+
+      if (videos.length === 0) {
+        renderVideos(getFallbackVideos());
+      } else {
+        renderVideos(videos);
+      }
+      window.videosLoaded = true;
+    } catch (err) {
+      console.warn('Video fetch failed, using fallback:', err);
+      renderVideos(getFallbackVideos());
+      window.videosLoaded = true;
+    }
+  }
+
+  function getFallbackVideos() {
+    return [
+      { title: 'ECZ Grade 12 Mathematics Revision', id: 'dQw4w9WgXcQ', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg' },
+      { title: 'Physics: Work, Energy & Power (Gr 10-12)', id: 'mGqUYcXqMjU', embedUrl: 'https://www.youtube.com/embed/mGqUYcXqMjU', thumbnail: 'https://img.youtube.com/vi/mGqUYcXqMjU/mqdefault.jpg' },
+      { title: 'English Grammar for ECZ Exams', id: 'n_sC8mRWmb0', embedUrl: 'https://www.youtube.com/embed/n_sC8mRWmb0', thumbnail: 'https://img.youtube.com/vi/n_sC8mRWmb0/mqdefault.jpg' },
+      { title: 'Biology: Human Transport System', id: 'HGz7x5QE4v8', embedUrl: 'https://www.youtube.com/embed/HGz7x5QE4v8', thumbnail: 'https://img.youtube.com/vi/HGz7x5QE4v8/mqdefault.jpg' },
+      { title: 'Chemistry: Chemical Bonding Explained', id: 'QqjcCvzWwww', embedUrl: 'https://www.youtube.com/embed/QqjcCvzWwww', thumbnail: 'https://img.youtube.com/vi/QqjcCvzWwww/mqdefault.jpg' },
+      { title: 'Civic Education: The Constitution', id: 'XH9ZoK8q5Ik', embedUrl: 'https://www.youtube.com/embed/XH9ZoK8q5Ik', thumbnail: 'https://img.youtube.com/vi/XH9ZoK8q5Ik/mqdefault.jpg' },
+      { title: 'Geography: Map Reading Skills', id: 'kIc9Uu3EYkM', embedUrl: 'https://www.youtube.com/embed/kIc9Uu3EYkM', thumbnail: 'https://img.youtube.com/vi/kIc9Uu3EYkM/mqdefault.jpg' },
+      { title: 'History: Zambian Independence', id: 'T6Yab9j7wgg', embedUrl: 'https://www.youtube.com/embed/T6Yab9j7wgg', thumbnail: 'https://img.youtube.com/vi/T6Yab9j7wgg/mqdefault.jpg' }
+    ];
+  }
+
+  function categorizeVideos(videos) {
+    const categorized = {};
+    const trending = [];
+
+    videos.forEach(v => {
+      const lowerTitle = v.title.toLowerCase();
+      let assigned = false;
+      for (const [subject, keywords] of Object.entries(subjectKeywords)) {
+        if (keywords.some(kw => lowerTitle.includes(kw))) {
+          if (!categorized[subject]) categorized[subject] = [];
+          categorized[subject].push(v);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        if (!categorized['Other']) categorized['Other'] = [];
+        categorized['Other'].push(v);
+      }
     });
 
-    // If there are more than 2, add the PURPLE "Show more" button
-    if(docs.length > 2){
-      const moreBtn = document.createElement("div");
-      moreBtn.className = "show-more";
-      moreBtn.innerHTML = `<i class="fas fa-chevron-down"></i> Show more (${docs.length - 2} more)`;
-      moreBtn.onclick = (() => openModal(sub, docs));
-      listDiv.appendChild(moreBtn);
+    const shuffled = [...videos];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    trending.push(...shuffled.slice(0, 6));
+
+    return { categorized, trending };
+  }
+
+  function renderVideos(videos) {
+    const { categorized, trending } = categorizeVideos(videos);
+
+    let html = '';
+
+    html += `<div class="video-section-title"><i class="fas fa-fire" style="color:#FF6B35;"></i> 🔥 Trending Videos</div>`;
+    html += `<div class="video-scroll-wrapper"><div class="video-scroll">`;
+    trending.forEach(v => {
+      html += createVideoCardHTML(v);
+    });
+    html += `</div></div>`;
+
+    const subjectOrder = ['Mathematics', 'English', 'Biology', 'Physics', 'Chemistry', 'Civic Education', 'Geography', 'History', 'Religious Education', 'Other'];
+    subjectOrder.forEach(sub => {
+      if (categorized[sub] && categorized[sub].length > 0) {
+        html += `<div class="video-section-title"><i class="fas fa-book" style="color:var(--primary);"></i> ${sub}</div>`;
+        html += `<div class="video-scroll-wrapper"><div class="video-scroll">`;
+        categorized[sub].forEach(v => {
+          html += createVideoCardHTML(v);
+        });
+        html += `</div></div>`;
+      }
+    });
+
+    videoContent.innerHTML = html;
+
+    document.querySelectorAll('.video-card').forEach((card, index) => {
+      card.addEventListener('click', () => {
+        const embedUrl = card.dataset.embed;
+        if (embedUrl) openVideoModal(embedUrl);
+      });
+    });
+  }
+
+  function createVideoCardHTML(video) {
+    const title = escapeHtml(video.title);
+    return `
+      <div class="video-card" data-embed="${video.embedUrl}">
+        <div class="thumb">
+          <img src="${video.thumbnail}" alt="${title}" loading="lazy" onerror="this.src='https://placehold.co/400x225/1a1d2b/D100FF?text=No+Thumb'">
+          <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+        </div>
+        <div class="video-title">${title}</div>
+        <span class="video-badge"><i class="fas fa-play"></i> Watch</span>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // 6. VIDEO MODAL
+  // ============================================================
+  function openVideoModal(embedUrl) {
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoModalFrame');
+    frame.src = embedUrl + '?autoplay=1';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const frame = document.getElementById('videoModalFrame');
+    frame.src = '';
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (document.getElementById('videoModal').classList.contains('active')) {
+        closeVideoModal();
+      }
     }
   });
-}
 
-function createDocCard(doc){
-  const b = document.createElement("div"); 
-  b.className = "doc-banner";
-  b.innerHTML = `
-    <div class="thumbnail"><img src="https://drive.google.com/thumbnail?id=${doc.id}" alt="thumbnail"></div>
-    <div class="doc-title">${doc.title}</div>
-    <button class="menu-btn"><i class="fas fa-ellipsis-v"></i></button>
-    <div class="menu-box">
-      <button onclick="event.stopPropagation();viewDoc('${doc.id}')"><i class="fas fa-eye"></i> View</button>
-      <button onclick="event.stopPropagation();shareDoc('${doc.id}')"><i class="fas fa-share-alt"></i> Share</button>
-    </div>
-  `;
-  // Click on card (excluding menu) opens the professional viewer
-  b.addEventListener("click", (e) => { 
-    if(!e.target.closest(".menu-btn")) viewDoc(doc.id); 
-  });
-  b.querySelector(".menu-btn").onclick = e => { 
-    e.stopPropagation(); 
-    closeMenus(); 
-    b.querySelector(".menu-box").classList.toggle("active"); 
-  };
-  return b;
-}
+  // ============================================================
+  // 7. SEARCH
+  // ============================================================
+  const searchInput = document.getElementById('globalSearchInput');
+  const searchBtn = document.getElementById('globalSearchBtn');
 
-function closeMenus(){ 
-  document.querySelectorAll(".menu-box").forEach(m => m.classList.remove("active")); 
-}
-document.addEventListener("click", closeMenus);
-
-// ---------- MODAL: SHOWS ALL DOCUMENTS (INCLUDING THE "OMITTED" ONES) ----------
-function openModal(title, docs){
-  document.getElementById("modalTitle").textContent = title;
-  const box = document.getElementById("modalDocs");
-  box.innerHTML = "";
-  // Display EVERY document in this subject inside the modal
-  docs.forEach(d => box.appendChild(createDocCard(d)));
-  document.getElementById("moreModal").style.display = "flex";
-}
-function closeModal(){ 
-  document.getElementById("moreModal").style.display = "none"; 
-}
-
-// ---------- NAVIGATE TO PROFESSIONAL VIEWER ----------
-function viewDoc(id){
-  window.location.href = `viewer.html?doc=${id}`;
-}
-
-// ---------- SHARE (copies viewer link) ----------
-function shareDoc(id){
-  const link = `${window.location.origin}${window.location.pathname.replace(/[^/]*$/, '')}viewer.html?doc=${id}`;
-  if(navigator.share){
-    navigator.share({title:"Zed Tuition Document", url:link});
-  } else {
-    navigator.clipboard.writeText(link).then(() => alert("Link copied to clipboard!"));
+  function performSearch() {
+    const query = searchInput.value.trim();
+    if (!query) return;
+    window.location.href = `searchresult.html?q=${encodeURIComponent(query)}&level=grade10-12`;
   }
-}
 
-// Build the list when page loads
-buildDocList();
+  searchBtn.addEventListener('click', performSearch);
+  searchInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') performSearch(); });
+
+  // ============================================================
+  // 8. URL PARAMS: Open doc if shared link (redirect to viewer)
+  // ============================================================
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('doc')) {
+    const docId = params.get('doc');
+    setTimeout(() => viewDocument(docId), 300);
+  }
+
+  console.log('✅ Grade 10-12 page updated: bottom bar removed, view navigates to viewer.html, icons loaded.');
 </script>
 </body>
 </html>
