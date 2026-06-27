@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline | Zed Tuition</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0f0f0f;
+      color: #eaeaea;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 480px;
+      text-align: center;
+      background: #161616;
+      padding: 40px 30px;
+      border-radius: 24px;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .icon {
+      font-size: 72px;
+      color: #7c5cff;
+      margin-bottom: 16px;
+      display: block;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+    .btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      background: #7c5cff;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+      font-size: 15px;
+    }
+    .btn:hover { background: #624bdd; }
+    .btn:active { transform: scale(0.96); }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #3a3a3a;
+      color: #ccc;
+    }
+    .btn-secondary:hover { background: #222; border-color: #7c5cff; }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .links a {
+      color: #7c5cff;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .links a:hover { color: #9b7cff; text-decoration: underline; }
+    .footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #555;
+      border-top: 1px solid #222;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="icon"><i class="fas fa-wifi"></i></span>
+    <h1>You're Offline</h1>
+    <p>We couldn't load the page you requested. But you can still visit pages you've already opened, or go back to the homepage.</p>
+
+    <div class="btn-grid">
+      <a href="/" class="btn"><i class="fas fa-home"></i> Go to Homepage</a>
+      <a href="#" onclick="history.back(); return false;" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Go Back</a>
+    </div>
+
+    <div class="links">
+      <a href="/grade10-12.html">Grade 10-12</a>
+      <a href="/form1-2.html">Form 1-4</a>
+      <a href="/primary.html">Primary 5-7</a>
+      <a href="/viewer.html">Document Viewer</a>
+    </div>
+
+    <div class="footer">
+      <i class="fas fa-graduation-cap" style="color:#7c5cff;"></i> Zed Tuition – empowering Zambian learners
+    </div>
+  </div>
+</body>
+</html>
