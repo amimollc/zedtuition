@@ -1,10 +1,11 @@
 // ============================================================
 // Zed Tuition - Full Service Worker
-// Version: v2.0.0
+// Version: v2.2.0 (Offline navigation: index.html first)
 // ============================================================
 
-const CACHE_VERSION = 'zed-tuition-v2.0.0';
+const CACHE_VERSION = 'zed-tuition-v2.2.0';
 const CACHE_NAME = CACHE_VERSION;
+const DYNAMIC_CACHE = 'zed-tuition-dynamic-v1';
 
 // ─── Core Assets to cache on install ───
 const STATIC_ASSETS = [
@@ -19,21 +20,19 @@ const STATIC_ASSETS = [
   '/offline.html',
   '/style.css',
   '/main.js',
+  '/fullscreen.js',
   '/favicon.png',
-  // Font Awesome (CSS + Fonts)
+  // Font Awesome
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-regular-400.woff2'
 ];
 
-// ─── Dynamic assets to cache on demand ───
-const DYNAMIC_CACHE = 'zed-tuition-dynamic-v1';
-
 // ─── Install Event ───
 self.addEventListener('install', event => {
   console.log('[SW] Installing Service Worker...');
-  
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -53,7 +52,7 @@ self.addEventListener('install', event => {
 // ─── Activate Event ───
 self.addEventListener('activate', event => {
   console.log('[SW] Activating Service Worker...');
-  
+
   event.waitUntil(
     caches.keys()
       .then(keys => {
@@ -76,62 +75,63 @@ self.addEventListener('activate', event => {
   );
 });
 
-// ─── Fetch Event ───
+// ─── Fetch Event – with explicit offline navigation logic ───
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // ── Skip non-GET requests ──
+  // Skip non-GET requests
   if (request.method !== 'GET') {
     event.respondWith(fetch(request));
     return;
   }
 
-  // ── Skip chrome-extension and other non-web requests ──
+  // Skip chrome-extension and file protocols
   if (url.protocol === 'chrome-extension:' || url.protocol === 'file:') {
     event.respondWith(fetch(request));
     return;
   }
 
-  // ── Handle Google Drive document embeds ──
+  // ── Special handling for navigation (HTML page requests) ──
+  if (request.mode === 'navigate') {
+    event.respondWith(handleNavigation(request));
+    return;
+  }
+
+  // ── Google Drive documents ──
   if (url.hostname === 'drive.google.com' && url.pathname.includes('/file/d/')) {
     event.respondWith(handleDriveRequest(request));
     return;
   }
 
-  // ── Handle YouTube embeds ──
+  // ── YouTube embeds ──
   if (url.hostname === 'www.youtube.com' || url.hostname === 'youtube.com' || url.hostname === 'youtu.be') {
     event.respondWith(handleYouTubeRequest(request));
     return;
   }
 
-  // ── Handle Google Drive thumbnails ──
+  // ── Google Drive thumbnails ──
   if (url.hostname === 'drive.google.com' && url.pathname.includes('/thumbnail')) {
     event.respondWith(handleThumbnailRequest(request));
     return;
   }
 
-  // ── Regular requests: Cache-first strategy ──
+  // ── All other requests: cache-first ──
   event.respondWith(
     caches.match(request)
       .then(cachedResponse => {
-        // Return cached response if available
         if (cachedResponse) {
           return cachedResponse;
         }
 
-        // Otherwise fetch from network
         return fetch(request)
           .then(networkResponse => {
-            // Only cache successful responses
             if (!networkResponse || networkResponse.status !== 200) {
               return networkResponse;
             }
 
-            // Clone the response
             const responseClone = networkResponse.clone();
 
-            // Cache the response (only for same-origin or specific CDNs)
             if (request.url.startsWith(self.location.origin) ||
                 request.url.includes('cdnjs.cloudflare.com') ||
                 request.url.includes('fonts.googleapis.com')) {
@@ -148,11 +148,7 @@ self.addEventListener('fetch', event => {
           })
           .catch(err => {
             console.warn('[SW] Network request failed:', request.url, err);
-            // Fallback for HTML pages
-            if (request.headers.get('accept').includes('text/html')) {
-              return caches.match('/offline.html');
-            }
-            // Return a simple fallback for images
+            // Return a generic fallback for non-HTML resources
             if (request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/i)) {
               return new Response(
                 '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="#1a1d2b"/><text x="50%" y="50%" font-family="sans-serif" font-size="14" fill="#7c5cff" text-anchor="middle" dy=".3em">Image unavailable</text></svg>',
@@ -164,6 +160,48 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+
+// ─── Navigation Request Handler ───
+async function handleNavigation(request) {
+  const url = new URL(request.url);
+
+  // 1. Always serve index.html for the root path
+  if (url.pathname === '/' || url.pathname === '/index.html') {
+    const cachedIndex = await caches.match('/index.html');
+    if (cachedIndex) {
+      console.log('[SW] Serving index.html from cache (root)');
+      return cachedIndex;
+    }
+    // If index.html is not in cache (should never happen), fallback to offline
+    return caches.match('/offline.html');
+  }
+
+  // 2. For other HTML pages: try cache first, then network, fallback to offline.html
+  const cachedPage = await caches.match(request);
+  if (cachedPage) {
+    console.log('[SW] Serving cached page:', request.url);
+    return cachedPage;
+  }
+
+  try {
+    // Try network
+    const networkResponse = await fetch(request);
+    if (networkResponse && networkResponse.status === 200) {
+      // Cache the new page for future offline use
+      const clone = networkResponse.clone();
+      caches.open(DYNAMIC_CACHE).then(cache => {
+        cache.put(request, clone);
+      });
+      return networkResponse;
+    }
+  } catch (err) {
+    console.warn('[SW] Offline: cannot load page:', request.url);
+  }
+
+  // 3. If all fails, show offline.html
+  console.log('[SW] Showing offline page for:', request.url);
+  return caches.match('/offline.html');
+}
 
 // ─── Google Drive Document Handler ───
 async function handleDriveRequest(request) {
@@ -178,8 +216,6 @@ async function handleDriveRequest(request) {
     }
     return response;
   } catch (err) {
-    console.warn('[SW] Drive request failed:', err);
-    // Return offline message for drive embeds
     return new Response(
       '<html><body style="background:#0f0f0f;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;"><div style="text-align:center;"><h2 style="color:#7c5cff;">📄 Offline</h2><p>This document is not available offline.<br>Please connect to the internet to view it.</p></div></body></html>',
       { headers: { 'Content-Type': 'text/html' } }
@@ -200,8 +236,6 @@ async function handleYouTubeRequest(request) {
     }
     return response;
   } catch (err) {
-    console.warn('[SW] YouTube request failed:', err);
-    // Return offline message for videos
     return new Response(
       '<html><body style="background:#0f0f0f;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;"><div style="text-align:center;"><h2 style="color:#7c5cff;">🎬 Offline</h2><p>This video is not available offline.<br>Please connect to the internet to watch it.</p></div></body></html>',
       { headers: { 'Content-Type': 'text/html' } }
@@ -222,8 +256,6 @@ async function handleThumbnailRequest(request) {
     }
     return response;
   } catch (err) {
-    console.warn('[SW] Thumbnail request failed:', err);
-    // Return a placeholder thumbnail
     return new Response(
       '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="260" viewBox="0 0 200 260"><rect width="200" height="260" fill="#1a1d2b"/><rect x="20" y="20" width="160" height="180" fill="#2a2d3b" rx="4"/><text x="100" y="140" font-family="sans-serif" font-size="48" fill="#7c5cff" text-anchor="middle">📄</text><text x="100" y="220" font-family="sans-serif" font-size="14" fill="#aaa" text-anchor="middle">Document</text></svg>',
       { headers: { 'Content-Type': 'image/svg+xml' } }
@@ -231,7 +263,7 @@ async function handleThumbnailRequest(request) {
   }
 }
 
-// ─── Background Sync for Download Queue ───
+// ─── Background Sync ───
 self.addEventListener('sync', event => {
   if (event.tag === 'download-sync') {
     event.waitUntil(processDownloadQueue());
@@ -245,7 +277,6 @@ async function processDownloadQueue() {
     try {
       const response = await fetch(request);
       if (response.ok) {
-        // Store in downloads cache
         const downloads = await caches.open('downloads');
         await downloads.put(request, response);
         await cache.delete(request);
@@ -256,7 +287,7 @@ async function processDownloadQueue() {
   }
 }
 
-// ─── Push Notifications (future feature) ───
+// ─── Push Notifications ───
 self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
   const options = {
@@ -280,5 +311,4 @@ self.addEventListener('notificationclick', event => {
   );
 });
 
-// ─── Log successful registration ───
 console.log('[SW] Service Worker loaded successfully!');
