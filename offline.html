@@ -26,28 +26,10 @@
       border: 1px solid #2a2a2a;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
-    .icon {
-      font-size: 72px;
-      color: #7c5cff;
-      margin-bottom: 16px;
-      display: block;
-    }
-    h1 {
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
-    p {
-      color: #aaa;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      font-size: 15px;
-    }
-    .btn-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .icon { font-size: 72px; color: #7c5cff; margin-bottom: 16px; display: block; }
+    h1 { font-size: 26px; margin-bottom: 8px; }
+    p { color: #aaa; line-height: 1.6; margin-bottom: 20px; font-size: 15px; }
+    .btn-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .btn {
       display: inline-block;
       background: #7c5cff;
@@ -67,27 +49,10 @@
       color: #ccc;
     }
     .btn-secondary:hover { background: #222; border-color: #7c5cff; }
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 8px;
-    }
-    .links a {
-      color: #7c5cff;
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.2s;
-    }
+    .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px; }
+    .links a { color: #7c5cff; text-decoration: none; font-size: 13px; transition: color 0.2s; }
     .links a:hover { color: #9b7cff; text-decoration: underline; }
-    .footer {
-      margin-top: 24px;
-      font-size: 11px;
-      color: #555;
-      border-top: 1px solid #222;
-      padding-top: 16px;
-    }
+    .footer { margin-top: 24px; font-size: 11px; color: #555; border-top: 1px solid #222; padding-top: 16px; }
   </style>
 </head>
 <body>
@@ -95,19 +60,16 @@
     <span class="icon"><i class="fas fa-wifi"></i></span>
     <h1>You're Offline</h1>
     <p>We couldn't load the page you requested. But you can still visit pages you've already opened, or go back to the homepage.</p>
-
     <div class="btn-grid">
       <a href="/" class="btn"><i class="fas fa-home"></i> Go to Homepage</a>
       <a href="#" onclick="history.back(); return false;" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Go Back</a>
     </div>
-
     <div class="links">
       <a href="/grade10-12.html">Grade 10-12</a>
       <a href="/form1-2.html">Form 1-4</a>
       <a href="/primary.html">Primary 5-7</a>
       <a href="/viewer.html">Document Viewer</a>
     </div>
-
     <div class="footer">
       <i class="fas fa-graduation-cap" style="color:#7c5cff;"></i> Zed Tuition – empowering Zambian learners
     </div>
