@@ -2,16 +2,58 @@
   "name": "Zed Tuition - Zambian Education Platform",
   "short_name": "Zed Tuition",
   "description": "Free ECZ-aligned documents, past papers, and video lessons for Zambian students",
-  "start_url": "/",
+  "start_url": "/zedtuition/index.html",
   "display": "fullscreen",
+  "display_override": ["standalone", "fullscreen"],
   "orientation": "any",
   "background_color": "#0f0f0f",
   "theme_color": "#D100FF",
   "categories": ["education", "learning", "zambia", "ecz", "study"],
   "lang": "en",
   "dir": "ltr",
-  "scope": "/",
+  "scope": "/zedtuition/",
   "prefer_related_applications": false,
+  "protocol_handlers": [
+    {
+      "protocol": "mailto",
+      "url": "/zedtuition/?email=%s"
+    },
+    {
+      "protocol": "sms",
+      "url": "/zedtuition/?sms=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/zedtuition/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "scope_extensions": [
+    { "origin": "https://drive.google.com" },
+    { "origin": "https://www.youtube.com" },
+    { "origin": "https://cdnjs.cloudflare.com" },
+    { "origin": "https://fonts.googleapis.com" }
+  ],
+  "file_handlers": [
+    {
+      "action": "/zedtuition/viewer.html",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
+        "text/plain": [".txt"],
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"],
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
+      }
+    }
+  ],
+  "related_applications": [],
+  "iarc_rating_id": "PEGI 3",
   "icons": [
     { "src": "icon-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any maskable" },
     { "src": "icon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any maskable" },
@@ -27,23 +69,22 @@
       "name": "Grade 10-12",
       "short_name": "Senior",
       "description": "Access Grade 10-12 resources",
-      "url": "/grade10-12.html",
+      "url": "/zedtuition/grade10-12.html",
       "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Form 1-4",
       "short_name": "Junior",
       "description": "Access Form 1-4 resources",
-      "url": "/form1-2.html",
+      "url": "/zedtuition/form1-2.html",
       "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Primary 5-7",
       "short_name": "Primary",
       "description": "Access Primary 5-7 resources",
-      "url": "/primary.html",
+      "url": "/zedtuition/primary.html",
       "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     }
-  ],
-  "related_applications": []
+  ]
 }
