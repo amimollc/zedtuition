@@ -1,23 +1,25 @@
-<!-- index.html (updated with loading spinner) -->
+<!-- index.html – corrected paths for PWA -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Zed Tuition | Home</title>
-<!-- PWA Meta Tags -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#D100FF">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/zedtuition/manifest.json">   <!-- ✅ absolute subdirectory path -->
+  <meta name="theme-color" content="#D100FF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/zedtuition/icon-192.png"> <!-- also fixed -->
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=1.0.1">
+  <link rel="stylesheet" href="style.css?v=1.0.1">  <!-- relative is fine (HTML is in /zedtuition/) -->
   <link rel="icon" type="image/svg+xml" href="favicon.png">
 </head>
 <body>
 
-<!-- ===== LOADING SPINNER (white) ===== -->
+<!-- ===== LOADING SPINNER ===== -->
 <div id="loadingOverlay">
   <div class="spinner"></div>
 </div>
@@ -87,21 +89,21 @@
     <a href="primary.html" class="level-tab"><i class="fas fa-child"></i> Primary 5-7</a>
   </div>
 
-  <!-- ===== TRENDING (will be filled by JS if online) ===== -->
+  <!-- TRENDING -->
   <section id="trending" class="trending-section">
     <h2 class="section-title-white"><i class="fas fa-fire" style="color:#FF6B35;"></i> Trending Documents</h2>
     <div class="trending-wrapper">
       <div class="trending-scroll" id="trendingScroll">
-        <!-- filled by JS when online -->
+        <!-- filled by JS -->
       </div>
     </div>
   </section>
 
-  <!-- ===== DISCOVER (will be filled by JS if online) ===== -->
+  <!-- DISCOVER -->
   <section id="discover" class="discover-section">
     <h2 class="section-title-white"><i class="fas fa-compass"></i> Discover</h2>
     <div class="discover-grid" id="discoverGrid">
-      <!-- filled by JS when online -->
+      <!-- filled by JS -->
     </div>
   </section>
 
@@ -123,7 +125,7 @@
   </div>
 </div>
 
-<!-- ===== FULL-PAGE DOWNLOAD OVERLAY ===== -->
+<!-- ===== DOWNLOAD OVERLAY ===== -->
 <div class="download-overlay" id="downloadOverlay">
   <div class="download-overlay-content">
     <button class="close-overlay" id="closeDownloadOverlay"><i class="fas fa-times"></i></button>
@@ -147,10 +149,10 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      // ✅ Correct absolute path to the service worker
+      navigator.serviceWorker.register('/zedtuition/sw.js')
         .then(reg => {
-          console.log('✅ Service Worker registered', reg.scope);
-          // Check for updates
+          console.log('✅ Service Worker registered with scope:', reg.scope);
           reg.addEventListener('updatefound', () => {
             console.log('🔄 New service worker found, updating...');
           });
