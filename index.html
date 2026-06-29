@@ -147,20 +147,8 @@
 
 <script src="main.js?v=1.0.1"></script>
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      // ✅ Correct absolute path to the service worker
-      navigator.serviceWorker.register('/zedtuition/sw.js')
-        .then(reg => {
-          console.log('✅ Service Worker registered with scope:', reg.scope);
-          reg.addEventListener('updatefound', () => {
-            console.log('🔄 New service worker found, updating...');
-          });
-        })
-        .catch(err => {
-          console.error('❌ Service Worker registration failed:', err);
-        });
-    });
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('sw.js')
   }
 </script>
 </body>
