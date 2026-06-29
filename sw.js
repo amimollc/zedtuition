@@ -1,16 +1,18 @@
 // ============================================================
-// Zed Tuition - Full Service Worker
-// Version: v2.2.0 (Offline navigation: index.html first)
+// Zed Tuition - Service Worker (Semi‑Permanent Homepage)
+// Version: v3.0.0
 // ============================================================
 
-const CACHE_VERSION = 'zed-tuition-v2.2.0';
+const CACHE_VERSION = 'zed-tuition-v3.0.0';
 const CACHE_NAME = CACHE_VERSION;
 const DYNAMIC_CACHE = 'zed-tuition-dynamic-v1';
 
 // ─── Core Assets to cache on install ───
+// The homepage (index.html) is cached, but with a versioned name
+// so updates are possible when the service worker changes.
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
+  '/index.html',                 // Semi‑permanent: cached but updated on new SW
   '/grade10-12.html',
   '/form1-2.html',
   '/primary.html',
@@ -22,6 +24,15 @@ const STATIC_ASSETS = [
   '/main.js',
   '/fullscreen.js',
   '/favicon.png',
+  // Icon files (now in root)
+  '/icon-72.png',
+  '/icon-96.png',
+  '/icon-128.png',
+  '/icon-144.png',
+  '/icon-152.png',
+  '/icon-192.png',
+  '/icon-384.png',
+  '/icon-512.png',
   // Font Awesome
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2',
@@ -31,7 +42,7 @@ const STATIC_ASSETS = [
 
 // ─── Install Event ───
 self.addEventListener('install', event => {
-  console.log('[SW] Installing Service Worker...');
+  console.log('[SW] Installing...');
 
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -51,7 +62,7 @@ self.addEventListener('install', event => {
 
 // ─── Activate Event ───
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating Service Worker...');
+  console.log('[SW] Activating...');
 
   event.waitUntil(
     caches.keys()
@@ -75,7 +86,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// ─── Fetch Event – with explicit offline navigation logic ───
+// ─── Fetch Event – with navigation logic ───
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
@@ -92,7 +103,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // ── Special handling for navigation (HTML page requests) ──
+  // ── Navigation requests (HTML pages) ──
   if (request.mode === 'navigate') {
     event.respondWith(handleNavigation(request));
     return;
@@ -132,6 +143,7 @@ self.addEventListener('fetch', event => {
 
             const responseClone = networkResponse.clone();
 
+            // Cache same-origin and CDN resources
             if (request.url.startsWith(self.location.origin) ||
                 request.url.includes('cdnjs.cloudflare.com') ||
                 request.url.includes('fonts.googleapis.com')) {
@@ -148,7 +160,7 @@ self.addEventListener('fetch', event => {
           })
           .catch(err => {
             console.warn('[SW] Network request failed:', request.url, err);
-            // Return a generic fallback for non-HTML resources
+            // Image fallback
             if (request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/i)) {
               return new Response(
                 '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="#1a1d2b"/><text x="50%" y="50%" font-family="sans-serif" font-size="14" fill="#7c5cff" text-anchor="middle" dy=".3em">Image unavailable</text></svg>',
@@ -161,22 +173,22 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// ─── Navigation Request Handler ───
+// ─── Navigation Handler ───
 async function handleNavigation(request) {
   const url = new URL(request.url);
 
-  // 1. Always serve index.html for the root path
+  // 1. Root path → always serve index.html (cached)
   if (url.pathname === '/' || url.pathname === '/index.html') {
     const cachedIndex = await caches.match('/index.html');
     if (cachedIndex) {
       console.log('[SW] Serving index.html from cache (root)');
       return cachedIndex;
     }
-    // If index.html is not in cache (should never happen), fallback to offline
+    // Fallback to offline if index not cached (should not happen)
     return caches.match('/offline.html');
   }
 
-  // 2. For other HTML pages: try cache first, then network, fallback to offline.html
+  // 2. Other pages: try cache, then network, fallback to offline.html
   const cachedPage = await caches.match(request);
   if (cachedPage) {
     console.log('[SW] Serving cached page:', request.url);
@@ -184,10 +196,8 @@ async function handleNavigation(request) {
   }
 
   try {
-    // Try network
     const networkResponse = await fetch(request);
     if (networkResponse && networkResponse.status === 200) {
-      // Cache the new page for future offline use
       const clone = networkResponse.clone();
       caches.open(DYNAMIC_CACHE).then(cache => {
         cache.put(request, clone);
@@ -198,7 +208,7 @@ async function handleNavigation(request) {
     console.warn('[SW] Offline: cannot load page:', request.url);
   }
 
-  // 3. If all fails, show offline.html
+  // 3. Fallback to offline.html
   console.log('[SW] Showing offline page for:', request.url);
   return caches.match('/offline.html');
 }
