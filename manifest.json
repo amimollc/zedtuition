@@ -4,138 +4,76 @@
   "description": "Free ECZ-aligned documents, past papers, and video lessons for Zambian students",
   "start_url": "/zedtuition/index.html",
   "display": "standalone",
-  "display_override": [
-    "standalone",
-    "fullscreen",
-    "window-controls-overlay"
-  ],
+  "display_override": ["standalone", "fullscreen", "window-controls-overlay"],
   "orientation": "any",
   "background_color": "#0f0f0f",
   "theme_color": "#D100FF",
-  "categories": [
-    "education",
-    "learning",
-    "zambia",
-    "ecz",
-    "study"
-  ],
+  "categories": ["education", "learning", "zambia", "ecz", "study"],
   "lang": "en",
   "dir": "ltr",
   "scope": "/zedtuition/",
   "prefer_related_applications": false,
   "protocol_handlers": [
-    {
-      "protocol": "mailto",
-      "url": "/zedtuition/?email=%s"
-    },
-    {
-      "protocol": "sms",
-      "url": "/zedtuition/?sms=%s"
-    }
+    { "protocol": "mailto", "url": "/zedtuition/?email=%s" },
+    { "protocol": "sms", "url": "/zedtuition/?sms=%s" }
   ],
   "share_target": {
     "action": "/zedtuition/",
     "method": "GET",
     "enctype": "application/x-www-form-urlencoded",
-    "params": {
-      "title": "Zed tuition",
-      "text": "text",
-      "url": "url"
-    }
+    "params": { "title": "Zed tuition", "text": "text", "url": "url" }
   },
   "scope_extensions": [
-    {
-      "origin": "https://drive.google.com"
-    },
-    {
-      "origin": "https://www.youtube.com"
-    },
-    {
-      "origin": "https://cdnjs.cloudflare.com"
-    },
-    {
-      "origin": "https://fonts.googleapis.com"
-    }
+    { "origin": "https://drive.google.com" },
+    { "origin": "https://www.youtube.com" },
+    { "origin": "https://cdnjs.cloudflare.com" },
+    { "origin": "https://fonts.googleapis.com" }
   ],
   "file_handlers": [
     {
       "action": "/zedtuition/viewer.html",
       "accept": {
-        "application/pdf": [
-          ".pdf"
-        ],
-        "image/*": [
-          ".png",
-          ".jpg",
-          ".jpeg",
-          ".gif",
-          ".webp"
-        ],
-        "text/plain": [
-          ".txt"
-        ],
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
-          ".docx"
-        ],
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation": [
-          ".pptx"
-        ],
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-          ".xlsx"
-        ]
+        "application/pdf": [".pdf"],
+        "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"],
+        "text/plain": [".txt"],
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation": [".pptx"],
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"]
       }
     }
   ],
   "iarc_rating_id": "PEGI 3",
-  "icons": [
+  "screenshots": [
     {
-      "src": "icon-72.png",
-      "sizes": "72x72",
+      "src": "/zedtuition/screenshot-mobile.png",
+      "sizes": "390x844",
       "type": "image/png",
-      "purpose": "any maskable"
+      "platform": "narrow",
+      "label": "Home screen"
     },
     {
-      "src": "icon-96.png",
-      "sizes": "96x96",
+      "src": "/zedtuition/screenshot-desktop.png",
+      "sizes": "1366x768",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "platform": "wide",
+      "label": "Desktop view"
     }
+  ],
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "icons": [
+    { "src": "icon-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "shortcuts": [
     {
@@ -143,39 +81,21 @@
       "short_name": "Senior",
       "description": "Access Grade 10-12 resources",
       "url": "/zedtuition/grade10-12.html",
-      "icons": [
-        {
-          "src": "icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Form 1-4",
       "short_name": "Junior",
       "description": "Access Form 1-4 resources",
       "url": "/zedtuition/form1-2.html",
-      "icons": [
-        {
-          "src": "icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "Primary 5-7",
       "short_name": "Primary",
       "description": "Access Primary 5-7 resources",
       "url": "/zedtuition/primary.html",
-      "icons": [
-        {
-          "src": "icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "icon-96.png", "sizes": "96x96", "type": "image/png" }]
     }
   ],
   "id": "com.zedtuitionlite.app"
