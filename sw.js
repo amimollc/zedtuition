@@ -1,6 +1,6 @@
 // ============================================================
 // Zed Tuition - Service Worker (Semi‑Permanent Homepage)
-// Version: v3.0.0
+// Version: v3.0.0 (subdirectory‑ready)
 // ============================================================
 
 const CACHE_VERSION = 'zed-tuition-v3.0.0';
@@ -8,32 +8,30 @@ const CACHE_NAME = CACHE_VERSION;
 const DYNAMIC_CACHE = 'zed-tuition-dynamic-v1';
 
 // ─── Core Assets to cache on install ───
-// The homepage (index.html) is cached, but with a versioned name
-// so updates are possible when the service worker changes.
+// All paths are now prefixed with /zedtuition/ to match the subdirectory.
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',                 // Semi‑permanent: cached but updated on new SW
-  '/grade10-12.html',
-  '/form1-2.html',
-  '/primary.html',
-  '/viewer.html',
-  '/about.html',
-  '/searchresult.html',
-  '/offline.html',
-  '/style.css',
-  '/main.js',
-  '/fullscreen.js',
-  '/favicon.png',
-  // Icon files (now in root)
-  '/icon-72.png',
-  '/icon-96.png',
-  '/icon-128.png',
-  '/icon-144.png',
-  '/icon-152.png',
-  '/icon-192.png',
-  '/icon-384.png',
-  '/icon-512.png',
-  // Font Awesome
+  '/zedtuition/',
+  '/zedtuition/index.html',
+  '/zedtuition/grade10-12.html',
+  '/zedtuition/form1-2.html',
+  '/zedtuition/primary.html',
+  '/zedtuition/viewer.html',
+  '/zedtuition/about.html',
+  '/zedtuition/searchresult.html',
+  '/zedtuition/offline.html',
+  '/zedtuition/style.css',
+  '/zedtuition/main.js',
+  '/zedtuition/fullscreen.js',
+  '/zedtuition/favicon.png',
+  '/zedtuition/icon-72.png',
+  '/zedtuition/icon-96.png',
+  '/zedtuition/icon-128.png',
+  '/zedtuition/icon-144.png',
+  '/zedtuition/icon-152.png',
+  '/zedtuition/icon-192.png',
+  '/zedtuition/icon-384.png',
+  '/zedtuition/icon-512.png',
+  // Font Awesome (CDN – absolute URLs remain unchanged)
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-solid-900.woff2',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/webfonts/fa-brands-400.woff2',
@@ -177,15 +175,15 @@ self.addEventListener('fetch', event => {
 async function handleNavigation(request) {
   const url = new URL(request.url);
 
-  // 1. Root path → always serve index.html (cached)
-  if (url.pathname === '/' || url.pathname === '/index.html') {
-    const cachedIndex = await caches.match('/index.html');
+  // 1. Subdirectory root or index.html → serve cached index.html
+  if (url.pathname === '/zedtuition/' || url.pathname === '/zedtuition/index.html') {
+    const cachedIndex = await caches.match('/zedtuition/index.html');
     if (cachedIndex) {
-      console.log('[SW] Serving index.html from cache (root)');
+      console.log('[SW] Serving index.html from cache (subdirectory root)');
       return cachedIndex;
     }
     // Fallback to offline if index not cached (should not happen)
-    return caches.match('/offline.html');
+    return caches.match('/zedtuition/offline.html');
   }
 
   // 2. Other pages: try cache, then network, fallback to offline.html
@@ -210,7 +208,7 @@ async function handleNavigation(request) {
 
   // 3. Fallback to offline.html
   console.log('[SW] Showing offline page for:', request.url);
-  return caches.match('/offline.html');
+  return caches.match('/zedtuition/offline.html');
 }
 
 // ─── Google Drive Document Handler ───
@@ -302,11 +300,11 @@ self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
   const options = {
     body: data.body || 'New educational content available!',
-    icon: 'favicon.png',
-    badge: 'favicon.png',
+    icon: '/zedtuition/favicon.png',
+    badge: '/zedtuition/favicon.png',
     vibrate: [200, 100, 200],
     data: {
-      url: data.url || '/'
+      url: data.url || '/zedtuition/'
     }
   };
   event.waitUntil(
@@ -317,8 +315,8 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
-    clients.openWindow(event.notification.data.url || '/')
+    clients.openWindow(event.notification.data.url || '/zedtuition/')
   );
 });
 
-console.log('[SW] Service Worker loaded successfully!');
+console.log('[SW] Service Worker loaded successfully (subdirectory-ready)!');
